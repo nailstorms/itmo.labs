@@ -128,8 +128,8 @@ public class Auth extends JFrame {
         registrationIndicator.setText("");
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter
-                    ("C://Users//nailstorm//IdeaProjects//lab5//materials//logPassClients.csv"));
-            writer.write(login + "/" + MD5(password));
+                    ("C://Users//nailstorm//IdeaProjects//lab5//materials//logPassClients.csv",true));
+            writer.write(login + "/" + MD5(password) + "\n");
             writer.flush();
             return true;
         } catch (FileNotFoundException exc) {
