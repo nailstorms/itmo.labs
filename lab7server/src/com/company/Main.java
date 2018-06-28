@@ -91,6 +91,19 @@ public class Main {
                                 break;
                             }
                         }
+
+                        case "change": {
+                            try {
+                                serverGUI.setOperationsStatus(mode.changeElement(additionalData));
+                                serverGUI.addListeners(mode.getNpcs());
+                                serverGUI.createTree(mode.getNpcs(), "Collection");
+                            } catch (DateTimeParseException exc) {
+                                serverGUI.setOperationsStatus("Incorrect date format.");
+                            }
+                            finally {
+                                break;
+                            }
+                        }
                         case "remove": {
                             serverGUI.setOperationsStatus(mode.removeElement(additionalData));
                             serverGUI.addListeners(mode.getNpcs());

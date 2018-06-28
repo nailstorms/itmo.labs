@@ -171,4 +171,28 @@ public class NPC extends AbstractCharacters implements Actions, Comparable<NPC>,
 
         return equal;
     }
+
+    public int getWeight() {
+        return (int) this.weight;
+    }
+
+    public int getHeight() {
+        return (int) this.height;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return this.dateOfBirth;
+    }
+
+    public int getNpcX() {
+        return (int) this.x;
+    }
+
+    public int getNpcY() {
+        return (int) this.y;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
 }

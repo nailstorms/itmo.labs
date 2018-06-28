@@ -5,12 +5,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,12 +41,13 @@ public class ServerGUI extends JFrame {
     private JPanel nestedRemoveElement = new JPanel();
     private JPanel nestedRemoveFirst = new JPanel();
     private JPanel nestedClear = new JPanel();
-    private JPanel nestedStatus = new JPanel();
+    private JPanel nestedChange = new JPanel();
 
-    private JButton addElement = new JButton("Add/change element");
+    private JButton addElement = new JButton("Add element");
     private JButton removeElement = new JButton("Remove element");
     private JButton removeFirstElement = new JButton("Remove first element");
     private JButton clearCollection = new JButton("Clear collection");
+    private JButton changeElement = new JButton("Change element");
     private JTextField operationsStatus = new JTextField(30);
 
     private JMenuBar menuBar = new JMenuBar();
@@ -58,14 +57,14 @@ public class ServerGUI extends JFrame {
     private JMenuItem exitGui = new JMenuItem("Exit");
     private JMenu guiHelp = new JMenu("Help");
 
-    private JTextField npcId = new JHintTextField("NPC's id");
-    private JTextField npcName = new JHintTextField("NPC's name");
-    private JTextField npcHeight = new JHintTextField("NPC's height");
-    private JTextField npcWeight = new JHintTextField("NPC's weight");
-    private JTextField npcDoB = new JHintTextField("NPC's date of birth");
-    private JTextField npcX = new JHintTextField("NPC's coordinate by x-axis");
-    private JTextField npcY = new JHintTextField("NPC's coordinate by y-axis");
-    private JTextField npcColor = new JHintTextField("NPC's color");
+    private JTextField npcId = new JTextField(12);
+    private JTextField npcName = new JTextField(12);
+    private JTextField npcHeight = new JTextField(12);
+    private JTextField npcWeight = new JTextField(12);
+    private JTextField npcDoB = new JTextField(12);
+    private JTextField npcX = new JTextField(12);
+    private JTextField npcY = new JTextField(12);
+    private JTextField npcColor = new JTextField(12);
     private JComboBox npcBeautyLevel;
     private JComboBox npcChinSharpness;
 
@@ -110,7 +109,7 @@ public class ServerGUI extends JFrame {
         this.add(rightCommandPanel, BorderLayout.EAST);
 
 
-        leftElementInputPanel.setBackground(Color.LIGHT_GRAY);
+
         leftElementInputPanel.setLayout(new GridLayout(10,2));
 
         fileHandling.add(readFromFile);
@@ -206,9 +205,7 @@ public class ServerGUI extends JFrame {
         rightCommandPanel.add(nestedAddElement);
         rightCommandPanel.add(new JPanel());
 
-        nestedRemoveElement.add(removeElement);
-        rightCommandPanel.add(nestedRemoveElement);
-        rightCommandPanel.add(new JPanel());
+
 
         nestedRemoveFirst.add(removeFirstElement);
         rightCommandPanel.add(nestedRemoveFirst);
@@ -216,10 +213,18 @@ public class ServerGUI extends JFrame {
 
         nestedClear.add(clearCollection);
         rightCommandPanel.add(nestedClear);
+        rightCommandPanel.add(new JPanel());
 
+        changeElement.setVisible(false);
+        nestedChange.add(changeElement);
+        rightCommandPanel.add(nestedChange);
         rightCommandPanel.add(new JPanel());
+
+        removeElement.setVisible(false);
+        nestedRemoveElement.add(removeElement);
+        rightCommandPanel.add(nestedRemoveElement);
         rightCommandPanel.add(new JPanel());
-        rightCommandPanel.add(new JPanel());
+
         rightCommandPanel.add(new JPanel());
         rightCommandPanel.add(new JPanel());
 
@@ -306,12 +311,26 @@ public class ServerGUI extends JFrame {
                 wantedToBeClosed = true;
             }
         });
+
+        changeElement.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeElement.setVisible(false);
+                changeElement.setVisible(false);
+                commandToExecute = "change";
+                wantedToBeExecuted = true;
+            }
+        });
     }
 
     public NPCTree createTree (LinkedBlockingDeque<NPC> npcs, String defaultNode) {
 
+
         List<TreePath> expandedPaths = new ArrayList<>();
         if (myTree != null) {
+            for(MouseListener listener : myTree.getMouseListeners())
+                myTree.removeMouseListener(listener);
+
             for (int i = 0; i < myTree.getRowCount() - 1; i++) {
                 TreePath currPath = myTree.getPathForRow(i);
                 TreePath nextPath = myTree.getPathForRow(i + 1);
@@ -340,6 +359,43 @@ public class ServerGUI extends JFrame {
             myTree.expandPath(path);
         }
 
+        myTree.setEditable(true);
+
+        myTree.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int row = myTree.getRowForLocation(e.getX(), e.getY());
+                TreePath path = myTree.getPathForLocation(e.getX(), e.getY());
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) myTree.getLastSelectedPathComponent();
+                if (row != -1) {
+                    if(node.isLeaf() && e.getClickCount() == 1) {
+                        changeElement.setVisible(true);
+                        removeElement.setVisible(true);
+                       NPC npc = (NPC) node.getUserObject();
+                       npcId.setText(npc.getId().toString());
+                       npcName.setText(npc.getNPCName());
+                       npcHeight.setText(Integer.toString(npc.getHeight()));
+                       npcWeight.setText(Integer.toString(npc.getWeight()));
+                       if (npc.getDateOfBirth()!=null)
+                        npcDoB.setText(npc.getDateOfBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                       else
+                           npcDoB.setText("");
+                       npcX.setText(Integer.toString(npc.getNpcX()));
+                       npcY.setText(Integer.toString(npc.getNpcY()));
+                       npcColor.setText(npc.getColor());
+                       if(npc.getBeauty()!=null)
+                        npcBeautyLevel.setSelectedItem(npc.getBeauty().toString());
+                       else
+                           npcBeautyLevel.setSelectedItem("");
+                       if(npc.getChin()!=null)
+                            npcChinSharpness.setSelectedItem(npc.getChin().toString());
+                       else
+                           npcChinSharpness.setSelectedItem("");
+                    }
+                }
+            }
+        });
+
         return myTree;
     }
 
@@ -354,6 +410,8 @@ public class ServerGUI extends JFrame {
         readFromFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                removeElement.setVisible(false);
+                changeElement.setVisible(false);
                 ServerGUI.this.createTree(npcs, "Collection");
             }
         });
@@ -361,6 +419,8 @@ public class ServerGUI extends JFrame {
         saveToFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                removeElement.setVisible(false);
+                changeElement.setVisible(false);
                 commandToExecute = "save";
                 wantedToBeExecuted = true;
             }
@@ -369,6 +429,8 @@ public class ServerGUI extends JFrame {
         addElement.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
+                removeElement.setVisible(false);
+                changeElement.setVisible(false);
                 commandToExecute = "add";
                 wantedToBeExecuted = true;
             }
@@ -377,6 +439,8 @@ public class ServerGUI extends JFrame {
         removeElement.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
+                removeElement.setVisible(false);
+                changeElement.setVisible(false);
                 commandToExecute = "remove";
                 wantedToBeExecuted = true;
             }
@@ -385,6 +449,8 @@ public class ServerGUI extends JFrame {
         removeFirstElement.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
+                removeElement.setVisible(false);
+                changeElement.setVisible(false);
                 commandToExecute = "remove_first";
                 wantedToBeExecuted = true;
             }
@@ -393,6 +459,7 @@ public class ServerGUI extends JFrame {
         clearCollection.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
+                changeElement.setVisible(false);
                 commandToExecute = "clear";
                 wantedToBeExecuted = true;
             }
@@ -418,10 +485,10 @@ public class ServerGUI extends JFrame {
         if (characteristics[4].equals("") || characteristics[4].equals("NPC's date of birth"))
             characteristics[4] = null;
         characteristics[5] = npcX.getText();
-        if (characteristics[5].equals("") || characteristics[5].equals("NPC's coordinate by x-axis"))
+        if (characteristics[5].equals("") || characteristics[5].equals("NPC's x coord."))
             characteristics[5] = null;
         characteristics[6] = npcY.getText();
-        if (characteristics[6].equals("") || characteristics[6].equals("NPC's coordinate by y-axis"))
+        if (characteristics[6].equals("") || characteristics[6].equals("NPC's y coord."))
             characteristics[6] = null;
         characteristics[7] = npcBeautyLevel.getSelectedItem().toString();
         if (characteristics[7].equals(""))

@@ -10,7 +10,7 @@ class JHintTextField extends JTextField implements FocusListener {
     private boolean showingHint;
 
     public JHintTextField(final String hint) {
-        super(15);
+        super(12);
         this.setText(hint);
         this.hint = hint;
         this.showingHint = true;

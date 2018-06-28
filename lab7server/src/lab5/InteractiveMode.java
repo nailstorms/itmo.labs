@@ -205,8 +205,6 @@ public class InteractiveMode {
                 if(allNpcs.getId() == npcId) {
                     System.out.println(allNpcs.getId());
                     indicator++;
-                    npcs.remove(allNpcs);
-                    npcs.add(newNPC);
 
                 }
             }
@@ -214,9 +212,38 @@ public class InteractiveMode {
                 npcs.add(newNPC);
             }
             else
-                return "Element with such id has been found. Replacing...";
+                return "Element with such id has already been found..";
 
             return "Element has been successfully added.";
+
+        } catch (NullPointerException exc) {
+            return "The object you are trying to add is null (missing name or incorrect input). " +
+                    "Please try again.";
+        }
+    }
+
+    public String changeElement(String data) {
+        try {
+            NPC newNPC = gson.fromJson(data, NPC.class);
+            int indicator = 0;
+            int npcId = newNPC.getId();
+            System.out.println(npcId);
+            for (NPC allNpcs : npcs) {
+                if(allNpcs.getId() == npcId) {
+                    System.out.println(allNpcs.getId());
+                    indicator++;
+                    npcs.remove(allNpcs);
+                    npcs.add(newNPC);
+                    break;
+                }
+            }
+            if(indicator == 0) {
+                npcs.add(newNPC);
+            }
+            else
+                return "Element replaced.";
+
+            return "Element with such id has not been found.";
 
         } catch (NullPointerException exc) {
             return "The object you are trying to add is null (missing name or incorrect input). " +
