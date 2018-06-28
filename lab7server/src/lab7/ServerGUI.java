@@ -127,44 +127,44 @@ public class ServerGUI extends JFrame {
         leftElementInputPanel.add(npcId, c);
 
         JLabel nameLabel = new JLabel("Name:");
-        c.gridy = 3; c.gridx = 1;
+        c.gridy = 2; c.gridx = 1;
         leftElementInputPanel.add(nameLabel, c);
         c.gridx = 2;
         leftElementInputPanel.add(npcName, c);
 
         JLabel dobLabel = new JLabel("Date of birth:");
-        c.gridy = 5; c.gridx = 1;
+        c.gridy = 3; c.gridx = 1;
         leftElementInputPanel.add(dobLabel, c);
         c.gridx = 2;
         leftElementInputPanel.add(npcDoB,c);
 
         JLabel heightLabel = new JLabel("Height:");
-        c.gridy = 7; c.gridx = 1;
+        c.gridy = 4; c.gridx = 1;
         leftElementInputPanel.add(heightLabel, c);
         c.gridx = 2;
         leftElementInputPanel.add(npcHeight,c);
 
         JLabel weightLabel = new JLabel("Weight:");
-        c.gridy = 9; c.gridx = 1;
+        c.gridy = 5; c.gridx = 1;
         leftElementInputPanel.add(weightLabel, c);
         c.gridx = 2;
         leftElementInputPanel.add(npcWeight,c);
 
         JLabel labelX = new JLabel("X:");
-        c.gridy = 11; c.gridx = 1;
+        c.gridy = 6; c.gridx = 1;
         leftElementInputPanel.add(labelX, c);
         c.gridx = 2;
         leftElementInputPanel.add(npcX,c);
 
 
         JLabel labelY = new JLabel("Y:");
-        c.gridy = 13; c.gridx = 1;
+        c.gridy = 7; c.gridx = 1;
         leftElementInputPanel.add(labelY, c);
         c.gridx = 2;
         leftElementInputPanel.add(npcY,c);
 
         JLabel labelColor = new JLabel("Color:");
-        c.gridy = 15; c.gridx = 1;
+        c.gridy = 8; c.gridx = 1;
         leftElementInputPanel.add(labelColor, c);
         c.gridx = 2;
         leftElementInputPanel.add(npcColor,c);
@@ -175,13 +175,13 @@ public class ServerGUI extends JFrame {
         npcChinSharpness = new JComboBox(chinSharpnesses);
 
         JLabel labelBeauties = new JLabel("Beauty level:");
-        c.gridy = 17; c.gridx = 1;
+        c.gridy = 9; c.gridx = 1;
         leftElementInputPanel.add(labelBeauties, c);
         c.gridx = 2;
         leftElementInputPanel.add(npcBeautyLevel,c);
 
         JLabel labelChinaNumberOne = new JLabel("Chin sharpness:");
-        c.gridy = 19; c.gridx = 1;
+        c.gridy = 10; c.gridx = 1;
         leftElementInputPanel.add(labelChinaNumberOne, c);
         c.gridx = 2;
         leftElementInputPanel.add(npcChinSharpness,c);
