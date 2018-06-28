@@ -23,7 +23,7 @@ public class ServerGUI extends JFrame {
     String commandToExecute = null;
 
     private JPanel leftElementInputPanel = new JPanel();
-    private JPanel middleCollectionPanel = new JPanel();
+    private JPanel middleCollectionPanel = new JPanel(new GridLayout(1, 1));
     private JPanel rightCommandPanel = new JPanel();
 
     private JPanel nestedId = new JPanel();
@@ -109,8 +109,9 @@ public class ServerGUI extends JFrame {
         this.add(rightCommandPanel, BorderLayout.EAST);
 
 
-
-        leftElementInputPanel.setLayout(new GridLayout(10,2));
+        leftElementInputPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(20, 5, 20, 5);
 
         fileHandling.add(readFromFile);
         fileHandling.add(saveToFile);
@@ -119,82 +120,71 @@ public class ServerGUI extends JFrame {
         menuBar.add(guiHelp);
         this.setJMenuBar(menuBar);
 
-
-        nestedId.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel idLabel = new JLabel("ID:");
-        idLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        leftElementInputPanel.add(idLabel);
-        nestedId.add(npcId);
-        leftElementInputPanel.add(nestedId);
+        c.gridy = 1; c.gridx = 1;
+        leftElementInputPanel.add(idLabel, c);
+        c.gridx = 2;
+        leftElementInputPanel.add(npcId, c);
 
-        nestedName.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel nameLabel = new JLabel("Name:");
-        nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        leftElementInputPanel.add(nameLabel);
-        nestedName.add(npcName);
-        leftElementInputPanel.add(nestedName);
+        c.gridy = 3; c.gridx = 1;
+        leftElementInputPanel.add(nameLabel, c);
+        c.gridx = 2;
+        leftElementInputPanel.add(npcName, c);
 
-        nestedDateOfBirth.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel dobLabel = new JLabel("Date of birth:");
-        dobLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        leftElementInputPanel.add(dobLabel);
-        nestedDateOfBirth.add(npcDoB);
-        leftElementInputPanel.add(nestedDateOfBirth);
+        c.gridy = 5; c.gridx = 1;
+        leftElementInputPanel.add(dobLabel, c);
+        c.gridx = 2;
+        leftElementInputPanel.add(npcDoB,c);
 
-        nestedHeight.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel heightLabel = new JLabel("Height:");
-        heightLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        leftElementInputPanel.add(heightLabel);
-        nestedHeight.add(npcHeight);
-        leftElementInputPanel.add(nestedHeight);
+        c.gridy = 7; c.gridx = 1;
+        leftElementInputPanel.add(heightLabel, c);
+        c.gridx = 2;
+        leftElementInputPanel.add(npcHeight,c);
 
-        nestedWeight.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel weightLabel = new JLabel("Weight:");
-        weightLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        leftElementInputPanel.add(weightLabel);
-        nestedWeight.add(npcWeight);
-        leftElementInputPanel.add(nestedWeight);
+        c.gridy = 9; c.gridx = 1;
+        leftElementInputPanel.add(weightLabel, c);
+        c.gridx = 2;
+        leftElementInputPanel.add(npcWeight,c);
 
-
-        nestedX.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel labelX = new JLabel("X:");
-        labelX.setHorizontalAlignment(SwingConstants.CENTER);
-        leftElementInputPanel.add(labelX);
-        nestedX.add(npcX);
-        leftElementInputPanel.add(nestedX);
+        c.gridy = 11; c.gridx = 1;
+        leftElementInputPanel.add(labelX, c);
+        c.gridx = 2;
+        leftElementInputPanel.add(npcX,c);
 
-        nestedY.setLayout(new FlowLayout(FlowLayout.CENTER));
+
         JLabel labelY = new JLabel("Y:");
-        labelY.setHorizontalAlignment(SwingConstants.CENTER);
-        leftElementInputPanel.add(labelY);
-        nestedY.add(npcY);
-        leftElementInputPanel.add(nestedY);
+        c.gridy = 13; c.gridx = 1;
+        leftElementInputPanel.add(labelY, c);
+        c.gridx = 2;
+        leftElementInputPanel.add(npcY,c);
 
-        nestedColor.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel labelColor = new JLabel("Color:");
-        labelColor.setHorizontalAlignment(SwingConstants.CENTER);
-        leftElementInputPanel.add(labelColor);
-        nestedColor.add(npcColor);
-        leftElementInputPanel.add(nestedColor);
+        c.gridy = 15; c.gridx = 1;
+        leftElementInputPanel.add(labelColor, c);
+        c.gridx = 2;
+        leftElementInputPanel.add(npcColor,c);
 
         String[] beautyLevels = {"", "Hideous", "Normal", "Beautiful"};
         String[] chinSharpnesses = {"", "Flat", "Normal", "Sharp"};
         npcBeautyLevel = new JComboBox(beautyLevels);
         npcChinSharpness = new JComboBox(chinSharpnesses);
 
-        nestedBeauties.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel labelBeauties = new JLabel("Beauty level:");
-        labelBeauties.setHorizontalAlignment(SwingConstants.CENTER);
-        leftElementInputPanel.add(labelBeauties);
-        nestedBeauties.add(npcBeautyLevel);
-        leftElementInputPanel.add(nestedBeauties);
+        c.gridy = 17; c.gridx = 1;
+        leftElementInputPanel.add(labelBeauties, c);
+        c.gridx = 2;
+        leftElementInputPanel.add(npcBeautyLevel,c);
 
-        nestedSharpnesses.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel labelChinaNumberOne = new JLabel("Chin sharpness:");
-        labelChinaNumberOne.setHorizontalAlignment(SwingConstants.CENTER);
-        leftElementInputPanel.add(labelChinaNumberOne);
-        nestedSharpnesses.add(npcChinSharpness);
-        leftElementInputPanel.add(nestedSharpnesses);
+        c.gridy = 19; c.gridx = 1;
+        leftElementInputPanel.add(labelChinaNumberOne, c);
+        c.gridx = 2;
+        leftElementInputPanel.add(npcChinSharpness,c);
 
 
         rightCommandPanel.setBackground(Color.LIGHT_GRAY);
@@ -324,20 +314,12 @@ public class ServerGUI extends JFrame {
     }
 
     public NPCTree createTree (LinkedBlockingDeque<NPC> npcs, String defaultNode) {
-
-
-        List<TreePath> expandedPaths = new ArrayList<>();
+        boolean isExpanded = false;
         if (myTree != null) {
             for(MouseListener listener : myTree.getMouseListeners())
                 myTree.removeMouseListener(listener);
 
-            for (int i = 0; i < myTree.getRowCount() - 1; i++) {
-                TreePath currPath = myTree.getPathForRow(i);
-                TreePath nextPath = myTree.getPathForRow(i + 1);
-                if (currPath.isDescendant(nextPath)) {
-                    expandedPaths.add(currPath);
-                }
-            }
+            isExpanded = myTree.isExpanded(0);
         }
         myTree = new NPCTree(defaultNode);
         DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) myTree.getModel().getRoot();
@@ -350,22 +332,18 @@ public class ServerGUI extends JFrame {
         this.middleCollectionPanel.remove(scrollPane);
         this.middleCollectionPanel.revalidate();
 
-        myTree.setPreferredSize(new Dimension(720,300));
+        myTree.setPreferredSize(new Dimension(720, 300));
         scrollPane.getViewport().add(myTree);
         this.middleCollectionPanel.add(scrollPane);
         this.middleCollectionPanel.repaint();
 
-        for (TreePath path : expandedPaths) {
-            myTree.expandPath(path);
-        }
 
-        myTree.setEditable(true);
+        if (isExpanded) myTree.expandRow(0);
 
         myTree.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 int row = myTree.getRowForLocation(e.getX(), e.getY());
-                TreePath path = myTree.getPathForLocation(e.getX(), e.getY());
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) myTree.getLastSelectedPathComponent();
                 if (row != -1) {
                     if(node.isLeaf() && e.getClickCount() == 1) {
