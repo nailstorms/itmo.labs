@@ -1,15 +1,10 @@
 package com.company;
 
-import lab6.DatagramReceiver;
-import lab7.Auth;
-import lab7.ServerGUI;
-import lab5.*;
+import lab3.NPC;
+import lab8.orm.DB;
+import lab8.orm.SQL;
 
-
-import java.awt.*;
-import java.io.File;
-import java.text.ParseException;
-import java.time.format.DateTimeParseException;
+import java.util.List;
 
 
 public class Main {
@@ -20,6 +15,29 @@ public class Main {
 
     public static void main(String[] args) {
 
+        SQL<NPC> sql = new SQL<>(NPC.class);
+        DB db = new DB("jdbc:postgresql://localhost:5432/lab8", "nailstorm", "qwerty");
+       db.execute(sql.createTable());
+
+        NPC npc = new NPC("zhopa", 123.0, 66.1, 77.1);
+//        db.executeUpdate(sql.insert(npc));
+
+        int id = db.executeUpdateGetId(sql.insert(npc));
+        System.out.println(sql.insert(npc));
+        npc.setId(id);
+
+        npc = new NPC("zhora", 11.0, 66.1, 77.1);
+        npc.setId(id);
+        System.out.println(sql.update(npc));
+
+        db.execute(sql.update(npc));
+//        System.out.println(sql.delete(npc));
+//        db.execute(sql.delete(npc));
+        List<NPC> listNpc = sql.resultsToObjects(db.fetch(sql.selectAll()));
+
+        for (NPC npce : listNpc)
+            System.out.println(npce);
+/*
         DatagramReceiver receiver = new DatagramReceiver();
         InteractiveMode mode = new InteractiveMode();
 
@@ -124,6 +142,6 @@ public class Main {
             }).run();
 
         }
-
+        */
     }
 }

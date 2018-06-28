@@ -8,6 +8,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -247,7 +251,7 @@ public class ServerGUI extends JFrame {
                 JLabel com1 = new JLabel("To add element to collection you must first specify all the fields which you want your NPC to have.\n");
 
                 JLabel labelElementsFields = new JLabel("Fields are as follows: id - unique NPC identifier (int); name - NPC's name (string);");
-                JLabel labelElementsFields1 = new JLabel("height - NPC's height (int); weight - NPC's weight (int); dateOfBirth - NPC's date of birth (format - \"yyyy-MM-dd\");");
+                JLabel labelElementsFields1 = new JLabel("height - NPC's height (int); weight - NPC's weight (int); dateOfBirth - NPC's date of birth (format - \"yyyy-MM-ddThh:mm:ss\");");
                 JLabel labelElementsFields2 = new JLabel("x,y - NPC's coordinates on the map (int), color - NPC's color (string);");
                 JLabel labelElementsFields3 = new JLabel("beautyLevel - NPC's level of beauty; chinSharpness - NPC's chin sharpness level.\n");
                 JLabel labelElementsFields4 = new JLabel("Fields \"ID\" and \"Name\" are obligatory.\n");
@@ -508,13 +512,14 @@ public class ServerGUI extends JFrame {
                                 if (i == 0 || i == 3) i++;
                             }
                             if(characteristics[4]!=null) {
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                Date dob = dateFormat.parse(characteristics[4]);
+//                                OffsetDateTime odt = OffsetDateTime.of(LocalDateTime.parse(characteristics[4],
+//                                        DateTimeFormatter.ISO_LOCAL_DATE_TIME),  OffsetDateTime.now(ZoneId.systemDefault()).getOffset());
+                                OffsetDateTime odt = LocalDateTime.parse(characteristics[4]).atZone(ZoneId.systemDefault()).toOffsetDateTime();
                             }
                         }   catch (NumberFormatException exc) {
                                 ServerGUI.this.setOperationsStatus("Numeric fields must be integer.");
                                 return "no";
-                            } catch (ParseException | DateTimeParseException exc) {
+                            } catch (DateTimeParseException exc) {
                                 ServerGUI.this.setOperationsStatus("Incorrect date format.");
                                 return "no";
                             }

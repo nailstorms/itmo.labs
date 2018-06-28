@@ -18,39 +18,42 @@ public class DB {
         }
     }
 
-    public void execute(String sql) throws SQLException {
-        connection.createStatement().execute(sql);
-    }
-
-    public void executeUpdate(String sql) throws SQLException {
-        connection.createStatement().executeUpdate(sql);
-    }
-
-    public ResultSet fetch(String sql) throws SQLException {
-        return connection.createStatement().executeQuery(sql);
-    }
-
-    public void close() {
+    public void execute(String sql)  {
         try {
-            connection.close();
-        } catch (Exception e) {
+            connection.createStatement().execute(sql);
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void setAutoCommit(Boolean b) {
+    public void executeUpdate(String sql) {
         try {
-            connection.setAutoCommit(b);
-        } catch (Exception e) {
+            connection.createStatement().executeUpdate(sql);
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void commit() {
+    public int executeUpdateGetId(String sql) {
         try {
-            connection.commit();
-        } catch (Exception e) {
+            ResultSet res = connection.createStatement().executeQuery(sql);
+            res.next();
+            return res.getInt(1);
+        } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
         }
     }
+
+    public ResultSet fetch(String sql) {
+        try {
+            return connection.createStatement().executeQuery(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

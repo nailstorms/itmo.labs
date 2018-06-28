@@ -9,17 +9,18 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class InteractiveMode {
     private final LinkedBlockingDeque<NPC> npcs = new LinkedBlockingDeque<>();
-    Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class,
-            (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) ->
-            LocalDate.parse(json.getAsJsonPrimitive().getAsString())).registerTypeAdapter(LocalDate.class,
-            (JsonSerializer<LocalDate>) (date, type, jsonSerializationContext) ->
-                    new JsonPrimitive(date.format(DateTimeFormatter.ISO_DATE))).create();
+    Gson gson = new GsonBuilder().registerTypeAdapter(OffsetDateTime.class,
+            (JsonDeserializer<OffsetDateTime>) (json, type, jsonDeserializationContext) ->
+                    OffsetDateTime.parse(json.getAsJsonPrimitive().getAsString(), DateTimeFormatter.ISO_OFFSET_DATE_TIME)).registerTypeAdapter(OffsetDateTime.class,
+            (JsonSerializer<OffsetDateTime>) (date, type, jsonSerializationContext) ->
+                    new JsonPrimitive(date.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))).create();
 
 
 
@@ -166,7 +167,7 @@ public class InteractiveMode {
             String userBsNpc = jsonNPCHandler(data);
             NPC newNPC = gson.fromJson(userBsNpc, NPC.class);
 
-            if (newNPC.getName() == null)
+            if (newNPC.getNPCName() == null)
                 throw new JsonParseException("");
 
             return newNPC;
