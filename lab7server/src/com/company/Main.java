@@ -1,10 +1,22 @@
 package com.company;
 
+import com.google.gson.*;
 import lab3.NPC;
+import lab5.InteractiveMode;
+import lab6.DatagramReceiver;
+import lab7.Auth;
+import lab7.ServerGUI;
 import lab8.orm.DB;
 import lab8.orm.SQL;
 
-import java.util.List;
+import java.awt.*;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.concurrent.LinkedBlockingDeque;
 
 
 public class Main {
@@ -14,30 +26,36 @@ public class Main {
     public static final int PortNumber = Integer.parseInt(System.getenv("PortNumber"));
 
     public static void main(String[] args) {
+//        OffsetDateTime odt = OffsetDateTime.of(LocalDateTime.parse("2009-01-01 10:35:35",
+//                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),  OffsetDateTime.now(ZoneId.systemDefault()).getOffset());
+//
+//        System.out.println(odt.toString());
+//
+
 
         SQL<NPC> sql = new SQL<>(NPC.class);
         DB db = new DB("jdbc:postgresql://localhost:5432/lab8", "nailstorm", "qwerty");
-       db.execute(sql.createTable());
-
-        NPC npc = new NPC("zhopa", 123.0, 66.1, 77.1);
-//        db.executeUpdate(sql.insert(npc));
-
-        int id = db.executeUpdateGetId(sql.insert(npc));
-        System.out.println(sql.insert(npc));
-        npc.setId(id);
-
-        npc = new NPC("zhora", 11.0, 66.1, 77.1);
-        npc.setId(id);
-        System.out.println(sql.update(npc));
-
-        db.execute(sql.update(npc));
+            db.execute(sql.createTable());
+//
+//        NPC npc = new NPC("za", 123.0, 66.1, 77.1);
+//             db.executeUpdate(sql.insert(npc));
+//
+//        int id = db.executeUpdateGetId(sql.insert(npc));
+//        System.out.println(sql.insert(npc));
+//        npc.setId(id);
+//
+//        npc = new NPC("zhora", 11.0, 66.1, 77.1);
+//        npc.setId(id);
+//        System.out.println(sql.update(npc));
+//
+//        db.execute(sql.update(npc));
 //        System.out.println(sql.delete(npc));
 //        db.execute(sql.delete(npc));
-        List<NPC> listNpc = sql.resultsToObjects(db.fetch(sql.selectAll()));
+//        List<NPC> listNpc = sql.resultsToObjects(db.fetch(sql.selectAll()));
+//
+//        for (NPC npce : listNpc)
+//            System.out.println(npce);
 
-        for (NPC npce : listNpc)
-            System.out.println(npce);
-/*
         DatagramReceiver receiver = new DatagramReceiver();
         InteractiveMode mode = new InteractiveMode();
 
@@ -51,11 +69,11 @@ public class Main {
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                mode.saveToFile(new File(filepath));
+                mode.saveToDB();
             }
         });
 
-        mode.inputFromFile(new File(filepath));
+        mode.inputFromDB();
         serverGUI.addListeners(mode.getNpcs());
 
         new Thread(()-> {
@@ -87,7 +105,7 @@ public class Main {
 
                     switch (command.toLowerCase()) {
                         case "save": {
-                            mode.saveToFile(new File(filepath));
+                            mode.saveToDB();
                             break;
                         }
                         case "clear": {
@@ -142,6 +160,6 @@ public class Main {
             }).run();
 
         }
-        */
+
     }
 }

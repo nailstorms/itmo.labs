@@ -251,7 +251,7 @@ public class ServerGUI extends JFrame {
                 JLabel com1 = new JLabel("To add element to collection you must first specify all the fields which you want your NPC to have.\n");
 
                 JLabel labelElementsFields = new JLabel("Fields are as follows: id - unique NPC identifier (int); name - NPC's name (string);");
-                JLabel labelElementsFields1 = new JLabel("height - NPC's height (int); weight - NPC's weight (int); dateOfBirth - NPC's date of birth (format - \"yyyy-MM-ddThh:mm:ss\");");
+                JLabel labelElementsFields1 = new JLabel("height - NPC's height (int); weight - NPC's weight (int); dateOfBirth - NPC's date of birth (format - \"yyyy-MM-dd\");");
                 JLabel labelElementsFields2 = new JLabel("x,y - NPC's coordinates on the map (int), color - NPC's color (string);");
                 JLabel labelElementsFields3 = new JLabel("beautyLevel - NPC's level of beauty; chinSharpness - NPC's chin sharpness level.\n");
                 JLabel labelElementsFields4 = new JLabel("Fields \"ID\" and \"Name\" are obligatory.\n");
@@ -512,14 +512,15 @@ public class ServerGUI extends JFrame {
                                 if (i == 0 || i == 3) i++;
                             }
                             if(characteristics[4]!=null) {
-//                                OffsetDateTime odt = OffsetDateTime.of(LocalDateTime.parse(characteristics[4],
-//                                        DateTimeFormatter.ISO_LOCAL_DATE_TIME),  OffsetDateTime.now(ZoneId.systemDefault()).getOffset());
-                                OffsetDateTime odt = LocalDateTime.parse(characteristics[4]).atZone(ZoneId.systemDefault()).toOffsetDateTime();
+                                OffsetDateTime odt = OffsetDateTime.of(LocalDateTime.parse(characteristics[4],
+                                        DateTimeFormatter.ISO_LOCAL_DATE_TIME),  OffsetDateTime.now(ZoneId.systemDefault()).getOffset());
+//                                OffsetDateTime odt = OffsetDateTime.parse(characteristics[4], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                             }
                         }   catch (NumberFormatException exc) {
                                 ServerGUI.this.setOperationsStatus("Numeric fields must be integer.");
                                 return "no";
-                            } catch (DateTimeParseException exc) {
+                            }
+                            catch (DateTimeParseException exc) {
                                 ServerGUI.this.setOperationsStatus("Incorrect date format.");
                                 return "no";
                             }
@@ -528,7 +529,7 @@ public class ServerGUI extends JFrame {
                         return commandToExecute + " " +
                                 "{\"levels\":{\"beauty\":" + characteristics[7] + ",\"" + "chin\":" + characteristics[8] + "}," +
                                 "\"name\":\"" + characteristics[1] + "\"," + "\"height\":" + characteristics[2] +
-                                ",\"weight\":" + characteristics[3] + ",\"dateOfBirth\":" + characteristics[4] + "," +
+                                ",\"weight\":" + characteristics[3] + ",\"dateOfBirth\":\"" + characteristics[4] + "\"," +
                                 "\"x\":" + characteristics[5] + ",\"y\":" + characteristics[6] + ",\"id\":" + characteristics[0] + ",\"color\":" + characteristics[9] + "}";
                     }
                 }

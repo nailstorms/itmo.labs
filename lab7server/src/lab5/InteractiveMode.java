@@ -1,26 +1,27 @@
 package lab5;
 
-import com.company.Main;
 import com.google.gson.*;
-import lab6.DatagramReceiver;
 import lab3.NPC;
+import lab8.orm.DB;
+import lab8.orm.SQL;
 
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class InteractiveMode {
-    private final LinkedBlockingDeque<NPC> npcs = new LinkedBlockingDeque<>();
+    private LinkedBlockingDeque<NPC> npcs = new LinkedBlockingDeque<>();
     Gson gson = new GsonBuilder().registerTypeAdapter(OffsetDateTime.class,
             (JsonDeserializer<OffsetDateTime>) (json, type, jsonDeserializationContext) ->
                     OffsetDateTime.parse(json.getAsJsonPrimitive().getAsString(), DateTimeFormatter.ISO_OFFSET_DATE_TIME)).registerTypeAdapter(OffsetDateTime.class,
             (JsonSerializer<OffsetDateTime>) (date, type, jsonSerializationContext) ->
                     new JsonPrimitive(date.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))).create();
+
+    SQL<NPC> sql = new SQL<>(NPC.class);
+    DB db = new DB("jdbc:postgresql://localhost:5432/lab8", "nailstorm", "qwerty");
 
 
 
@@ -28,34 +29,18 @@ public class InteractiveMode {
      * inputFromFile fills collection of class NPC with objects of the latter lying in the {@code file},
      * also checking each object if it is maximal or minimal of the given ones;
      *
-     * @param file is the input file where the objects are stored;
      * @return true if the reading from {@code file} operation was successful with all the objects
      * now stored in the collection.
      */
 
-    public boolean inputFromFile(File file) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+    public boolean inputFromDB() {
+        try  {
 
-            String someBS;
-            NPC readNPCs;
-
-            while ((someBS = reader.readLine()) != null) {
-                {
-                    try {
-                        readNPCs = gson.fromJson(someBS, NPC.class);
-                        npcs.add(readNPCs);
-
-                    } catch (Exception exc) {
-                        System.err.println("An unexpected exception has occurred " + someBS);
-                    }
-                }
-            }
+            npcs = new LinkedBlockingDeque<>(sql.resultsToObjects(db.fetch(sql.selectAll())));
 
             return true;
 
-        } catch (FileNotFoundException exc) {
-            System.err.printf("File %s was not found\n", file.getName());
-        } catch (IOException exc) {
+        } catch (Exception exc) {
             System.err.println("An unexpected exception with I/O has occurred. Please try again.");
         }
         return false;
@@ -64,18 +49,16 @@ public class InteractiveMode {
     /**
      * saveToFile saves the collection of class NPC in the {@code file} in JSON;
      *
-     * @param file is the output file where the objects will be stored;
      * @return true if the saving to {@code file} operation was successful.
      */
 
-    public boolean saveToFile(File file) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            synchronized (npcs) {
-                for (NPC readNPCs : npcs)
-                    writer.write(gson.toJson(readNPCs) + '\n');
-            }
+    public boolean saveToDB() {
+        try {
+            db.execute(sql.deleteAll());
+            for (NPC npc : npcs)
+                db.executeUpdate(sql.insert(npc));
             return true;
-        } catch (IOException exc) {
+        } catch (Exception exc) {
             System.err.println("An unexpected exception with I/O has occurred. Please try again.");
         }
 
@@ -90,6 +73,7 @@ public class InteractiveMode {
 
     public String retrieveElements() {
         StringBuilder elements = new StringBuilder();
+        npcs = new LinkedBlockingDeque<>(sql.resultsToObjects(db.fetch(sql.selectAll())));
         if (npcs.isEmpty())
             return "Collection is empty - nothing to retrieve.";
         else {
@@ -109,7 +93,8 @@ public class InteractiveMode {
 
     public String clear() {
         try {
-            npcs.clear();
+            db.execute(sql.deleteAll());
+            npcs = new LinkedBlockingDeque<>(sql.resultsToObjects(db.fetch(sql.selectAll())));
             return "Collection has been cleared.";
         } catch (Exception exc) {
             return "An unexpected error has occurred. Please try again.";
@@ -125,34 +110,11 @@ public class InteractiveMode {
         if (npcs.isEmpty())
             return "Collection is already empty - nothing to remove.";
         else {
-            npcs.removeFirst();
+            db.execute(sql.delete(npcs.removeFirst()));
             return "First element has been removed.";
         }
     }
 
-    /**
-     * importFromFile appends collection of class NPC with objects of the latter lying in the {@code file};
-     *
-     * @param path is the path of file from which the new objects are extracted;
-     *             This method is used for retrieving objects from a non-root input file;
-     *             otherwise call inputFromFile (see above).
-     */
-
-    public String importFromFile(String path) {
-        Path pathToJson = Paths.get(path);
-
-        if (!pathToJson.toFile().canRead()) {
-            return "File " + pathToJson.toFile().getName() + " does not have " +
-                    "read permission.";
-        }
-
-        File secondaryFile = new File(path);
-        if (inputFromFile(secondaryFile))
-            return "Collection has been successfully imported from " + new File(path).getName();
-        else
-            return "File was not found or there was an error while retrieving " +
-                    "collection from this file. Please try again.";
-    }
 
     /**
      * justNPCInput() invokes an NPC creator;
@@ -211,9 +173,10 @@ public class InteractiveMode {
             }
             if(indicator == 0) {
                 npcs.add(newNPC);
+                db.executeUpdate(sql.insert(newNPC));
             }
             else
-                return "Element with such id has already been found..";
+                return "Element with such id has already been found.";
 
             return "Element has been successfully added.";
 
@@ -235,16 +198,16 @@ public class InteractiveMode {
                     indicator++;
                     npcs.remove(allNpcs);
                     npcs.add(newNPC);
+                    db.execute(sql.update(newNPC));
                     break;
                 }
             }
             if(indicator == 0) {
-                npcs.add(newNPC);
+                return "Element with such id has not been found.";
             }
             else
                 return "Element replaced.";
 
-            return "Element with such id has not been found.";
 
         } catch (NullPointerException exc) {
             return "The object you are trying to add is null (missing name or incorrect input). " +
@@ -269,6 +232,7 @@ public class InteractiveMode {
                 for (NPC allNpcs : npcs) {
                     if(allNpcs.getId() == npcId) {
                         npcs.remove(allNpcs);
+                        db.execute(sql.delete(allNpcs));
                         return "Element has been removed.";
                     }
                 }
