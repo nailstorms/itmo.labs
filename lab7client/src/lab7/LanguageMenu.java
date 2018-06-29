@@ -22,32 +22,32 @@ public class LanguageMenu extends JMenu {
         });
         this.add(ru_Ru);
 
-        JMenuItem ee_EE = new JMenuItem("Eesti");
-        ee_EE.addActionListener(new ActionListener() {
+        JMenuItem pt_PT = new JMenuItem("Português");
+        pt_PT.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gui.changeLanguage(new Locale("ee"));
+                gui.changeLanguage(new Locale("pt"));
             }
         });
-        this.add(ee_EE);
+        this.add(pt_PT);
 
-        JMenuItem lv_LV = new JMenuItem("Latviešu");
-        lv_LV.addActionListener(new ActionListener() {
+        JMenuItem gr_GR = new JMenuItem("Ελληνικά");
+        gr_GR.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gui.changeLanguage(new Locale("lv"));
+                gui.changeLanguage(new Locale("gr"));
             }
         });
-        this.add(lv_LV);
+        this.add(gr_GR);
 
-        JMenuItem es_CO = new JMenuItem("Español");
-        es_CO.addActionListener(new ActionListener() {
+        JMenuItem es_NI = new JMenuItem("Español");
+        es_NI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gui.changeLanguage(new Locale("es", "CO"));
+                gui.changeLanguage(new Locale("es", "NI"));
             }
         });
-        this.add(es_CO);
+        this.add(es_NI);
     }
 
     LanguageMenu (Auth auth){
@@ -65,32 +65,32 @@ public class LanguageMenu extends JMenu {
         });
         this.add(ru_Ru);
 
-        JMenuItem ee_EE = new JMenuItem("Eesti");
-        ee_EE.addActionListener(new ActionListener() {
+        JMenuItem pt_PT = new JMenuItem("Português");
+        pt_PT.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                auth.changeLanguage(new Locale("ee"));
+                auth.changeLanguage(new Locale("pt"));
             }
         });
-        this.add(ee_EE);
+        this.add(pt_PT);
 
-        JMenuItem lv_LV = new JMenuItem("Latviešu");
-        lv_LV.addActionListener(new ActionListener() {
+        JMenuItem gr_GR = new JMenuItem("Ελληνικά");
+        gr_GR.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                auth.changeLanguage(new Locale("lv"));
+                auth.changeLanguage(new Locale("gr"));
             }
         });
-        this.add(lv_LV);
+        this.add(gr_GR);
 
-        JMenuItem es_CO = new JMenuItem("Español");
-        es_CO.addActionListener(new ActionListener() {
+        JMenuItem es_NI = new JMenuItem("Español");
+        es_NI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                auth.changeLanguage(new Locale("es", "CO"));
+                auth.changeLanguage(new Locale("es", "NI"));
             }
         });
-        this.add(es_CO);
+        this.add(es_NI);
     }
 
     public void changeLanguage(Locale locale){
