@@ -40,8 +40,8 @@ public class InteractiveMode {
         try  {
 
             npcs = new LinkedBlockingDeque<>(sql.resultsToObjects(db.fetch(sql.selectAll())));
-            for (NPC npc : npcs)
-                currId = npc.getId();
+
+                currId = npcs.peekLast().getId();
 
             return true;
 

@@ -6,7 +6,19 @@ import lab8.orm.Table;
 
 public class Users {
     public String login;
-    public String password;
+    public String passwordHash;
 
-    Users () {}
+    public Users () {}
+    Users (String login, String passwordHash) {
+        this.login = login;
+        this.passwordHash = passwordHash;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
 }

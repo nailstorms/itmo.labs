@@ -80,6 +80,24 @@ public class Main {
                 String data = receiver.receiveData();
                 if (data.equals("save"))
                     receiver.transmitCollection(mode.getNpcs());
+                else {
+                    String[] logPass = data.split("/",3);
+                    for (String logPasses : logPass) {
+                        System.out.println(logPasses);
+                    }
+                    if(logPass[0].equals("login")) {
+                        if (login.checkClientLogin(logPass[1], logPass[2]))
+                            receiver.transmitMessage("Success");
+                        else
+                            receiver.transmitMessage("Wrong");
+                    }
+                    else if (logPass[0].equals("register")) {
+                        if(login.register(logPass[1], logPass[2]))
+                            receiver.transmitMessage("Success");
+                        else
+                            receiver.transmitMessage("Wrong");
+                    }
+                }
             }
         }).start();
 

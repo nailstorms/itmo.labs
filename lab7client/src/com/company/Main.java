@@ -4,7 +4,6 @@ import lab7.Auth;
 import lab7.ClientGUI;
 import lab7.DatagramTransfer;
 
-import java.awt.*;
 import java.io.IOException;
 
 
@@ -18,9 +17,38 @@ public class Main {
             Auth login = new Auth(() -> clientGUI.setVisible(true));
             login.setVisible(true);
 
-            if(login.hasPassedTheCheck()) {
-                EventQueue.invokeLater(() -> clientGUI.setVisible(true));
+            while(true) {
+                DatagramTransfer transfer = new DatagramTransfer(IPAddress, PortNumber);
+                if(login.isWantedToBeExecuted()) {
+                    login.setWantedToBeExecuted(false);
+                    String authTransmit = login.getCommand();
+                    String loginTransmit = login.getInputUsername();
+                    String passwordTransmit = login.getInputPassword();
+                    transfer.transmitData(authTransmit + "/" + loginTransmit + "/" + passwordTransmit);
+                    String[] receivedData = transfer.receiveData();
+                    if (authTransmit.equals("register")) {
+                        if (receivedData[0].equals("No response from server. Try again later."))
+                            login.setIndicator(clientGUI.getServerUnav());
+                        else {
+                            if (receivedData[0].equals("Success"))
+                                login.registeredSuccessfully();
+                            else if(receivedData[0].equals("Wrong"))
+                                login.setRegistrationIndicator(login.getUserAlreadyExists());
+                        }
+                    } else if (authTransmit.equals("login")) {
+                        if (receivedData[0].equals("No response from server. Try again later."))
+                            login.setIndicator(clientGUI.getServerUnav());
+                        else if (receivedData[0].equals("Wrong")) {
+                            login.setIndicator(login.getIncorrectCombo());
+                        } else if (receivedData[0].equals("Success")) {
+                            login.setIndicator(login.getSuccess());
+                            login.passTheCheck();
+                            break;
+                        }
+                    }
+                }
             }
+
             while (true) {
                DatagramTransfer transfer = new DatagramTransfer(IPAddress, PortNumber);
                if(clientGUI.isDataAcquirePressed()) {

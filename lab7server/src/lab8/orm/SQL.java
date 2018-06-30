@@ -118,6 +118,10 @@ public class SQL<T> {
         return "DELETE FROM " + tableName + " WHERE " + pkColumn + " = " + pkValue;
     }
 
+    public String select(int id) {
+        return "SELECT * FROM " + tableName + " WHERE " + pkColumn + " = " + Integer.toString(id);
+    }
+
     public String deleteAll() {
 
         return "DELETE FROM " + tableName;
