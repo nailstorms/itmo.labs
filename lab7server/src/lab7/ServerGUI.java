@@ -46,8 +46,8 @@ public class ServerGUI extends JFrame {
 
     private JMenuBar menuBar = new JMenuBar();
     private JMenu fileHandling = new JMenu("File");
-    private JMenuItem readFromFile = new JMenuItem("Read collection from file");
-    private JMenuItem saveToFile = new JMenuItem("Save collection to file");
+    private JMenuItem readFromFile = new JMenuItem("Read collection from database");
+    private JMenuItem saveToFile = new JMenuItem("Save collection to database");
     private JMenuItem exitGui = new JMenuItem("Exit");
     private JMenu guiHelp = new JMenu("Help");
 
@@ -372,7 +372,7 @@ public class ServerGUI extends JFrame {
         this.middleCollectionPanel.remove(scrollPane);
         this.middleCollectionPanel.revalidate();
 
-        myTree.setPreferredSize(new Dimension(720, 300));
+//        myTree.setPreferredSize(new Dimension(720, 1000));
         scrollPane.getViewport().add(myTree);
         this.middleCollectionPanel.add(scrollPane);
         this.middleCollectionPanel.repaint();

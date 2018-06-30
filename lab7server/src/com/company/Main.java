@@ -70,9 +70,6 @@ public class Main {
 //            }
 //        });
 
-        mode.inputFromDB();
-        serverGUI.setNpcId(mode.getCurrId()+1);
-        serverGUI.addListeners(mode.getNpcs());
 
 
         new Thread(()-> {
@@ -101,6 +98,10 @@ public class Main {
             }
         }).start();
 
+
+        mode.inputFromDB();
+//        serverGUI.setNpcId(mode.getCurrId()+1);
+        serverGUI.addListeners(mode.getNpcs());
         while (true) {
 //            String data = receiver.receiveData();
 
