@@ -247,7 +247,7 @@ public class ServerGUI extends JFrame {
                 JLabel com1 = new JLabel("To add element to collection you must first specify all the fields which you want your NPC to have.\n");
 
                 JLabel labelElementsFields = new JLabel("Fields are as follows: id - unique NPC identifier (int); name - NPC's name (string);");
-                JLabel labelElementsFields1 = new JLabel("height - NPC's height (int); weight - NPC's weight (int); dateOfBirth - NPC's date of birth (format - \"yyyy-MM-dd\");");
+                JLabel labelElementsFields1 = new JLabel("height - NPC's height (int); weight - NPC's weight (int); dateOfBirth - NPC's date of birth (format - \"yyyy-MM-dd'T'HH:mm:ss\");");
                 JLabel labelElementsFields2 = new JLabel("x,y - NPC's coordinates on the map (int), color - NPC's color (string);");
                 JLabel labelElementsFields3 = new JLabel("beautyLevel - NPC's level of beauty; chinSharpness - NPC's chin sharpness level.\n");
                 JLabel labelElementsFields4 = new JLabel("Fields \"ID\" and \"Name\" are obligatory.\n");

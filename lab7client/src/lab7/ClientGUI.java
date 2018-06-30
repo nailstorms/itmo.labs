@@ -1,11 +1,18 @@
 package lab7;
 
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
+import com.github.lgooddatepicker.components.DateTimePicker;
+import com.github.lgooddatepicker.components.TimePickerSettings;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.Timer;
@@ -56,6 +63,9 @@ public class ClientGUI extends JFrame {
     private JPanel nestedX = new JPanel();
     private JPanel nestedY = new JPanel();
     private JPanel nestedDateOfBirth = new JPanel();
+    private JPanel nestedDateOfBirthLabels = new JPanel();
+    private JPanel nestedDateOfBirthFrom = new JPanel();
+    private JPanel nestedDateOfBirthTo = new JPanel();
     private JPanel nestedNames = new JPanel();
     private JPanel nestedColors = new JPanel();
     private JPanel nestedBeauties = new JPanel();
@@ -69,8 +79,8 @@ public class ClientGUI extends JFrame {
     private JTextField heightTo = new JTextField(8);
     private JTextField weightFrom = new JTextField(8);
     private JTextField weightTo = new JTextField(8);
-    private JTextField dateOfBirthFrom = new JTextField(8);
-    private JTextField dateOfBirthTo = new JTextField(8);
+    private DateTimePicker dateOfBirthFrom = new DateTimePicker();
+    private DateTimePicker dateOfBirthTo = new DateTimePicker();
     private JTextField xFrom = new JTextField(8);
     private JTextField xTo = new JTextField(8);
     private JTextField yFrom = new JTextField(8);
@@ -94,7 +104,7 @@ public class ClientGUI extends JFrame {
     private JTextField nameCurrentValue = new JTextField(5);
     private JTextField heightCurrentValue = new JTextField(5);
     private JTextField weightCurrentValue = new JTextField(5);
-    private JTextField dobCurrentValue = new JTextField(8);
+    private JTextField dobCurrentValue = new JTextField(12);
     private JTextField beautyCurrentValue = new JTextField(6);
     private JTextField chinCurrentValue = new JTextField(6);
 
@@ -259,12 +269,15 @@ public class ClientGUI extends JFrame {
         nestedY.add(yTo);
         filterPanel.add(nestedY);
 
-        nestedDateOfBirth.setLayout(new FlowLayout(FlowLayout.CENTER,3,0));
-        JLabel dobLabel = new JLabel("< date of birth <");
-        nestedDateOfBirth.add(dateOfBirthFrom);
-        nestedDateOfBirth.add(dobLabel);
-        nestedDateOfBirth.add(dateOfBirthTo);
+        nestedDateOfBirth.setLayout(new FlowLayout(FlowLayout.CENTER,30,0));
+        JLabel dobLabelFrom = new JLabel("date of birth >                 ");
+        JLabel dobLabelTo = new JLabel("                 date of birth <");
+        nestedDateOfBirthLabels.add(dobLabelFrom);
+        nestedDateOfBirthLabels.add(dobLabelTo);
+        filterPanel.add(nestedDateOfBirthLabels);
+//        nestedDateOfBirth.setLayout(new FlowLayout(FlowLayout.CENTER,3,0));
         filterPanel.add(nestedDateOfBirth);
+
 
         nestedNames.setLayout(new FlowLayout(FlowLayout.CENTER,30,0));
         nestedColors.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -462,7 +475,7 @@ public class ClientGUI extends JFrame {
 
                             int redValue = ellipses[i].getColor().getRed();
                             int greenValue = ellipses[i].getColor().getGreen();
-                            int blueValue = ellipses[i].getColor().getGreen();
+                            int blueValue = ellipses[i].getColor().getBlue();
                             int alphaValue = ellipses[i].getColor().getAlpha()+5;
                             if (alphaValue > 255) alphaValue = 255;
 
@@ -510,7 +523,7 @@ public class ClientGUI extends JFrame {
 
                             int redValue = ellipses[i].getColor().getRed();
                             int greenValue = ellipses[i].getColor().getGreen();
-                            int blueValue = ellipses[i].getColor().getGreen();
+                            int blueValue = ellipses[i].getColor().getBlue();
                             int alphaValue = ellipses[i].getColor().getAlpha()-5;
                             if (alphaValue < 0) alphaValue = 0;
 
@@ -602,13 +615,13 @@ public class ClientGUI extends JFrame {
         int max[] = {-30000,-30000,-30000,-30000,-30000,-30000,-30000,-30000,-30000,-30000};
         int min[] = {30000,30000,30000,30000,30000,30000,30000,30000,30000,30000};
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Calendar maxDateCal = Calendar.getInstance();
         Calendar minDateCal = Calendar.getInstance();
         maxDateCal.set(1800,Calendar.JANUARY,1);
         minDateCal.set(2030,Calendar.JANUARY,1);
-        Date maxDate = maxDateCal.getTime();
-        Date minDate = minDateCal.getTime();
+        LocalDateTime maxDate = maxDateCal.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime minDate = minDateCal.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
 
         ArrayList<String> color = new ArrayList<>();
@@ -623,9 +636,9 @@ public class ClientGUI extends JFrame {
             if(!fields[4].equals("null")) {
                 try {
 
-                        Date dateOfBirthNew = format.parse(fields[4]);
-                        if (dateOfBirthNew.after(maxDate)) maxDate = dateOfBirthNew;
-                        if (dateOfBirthNew.before(minDate)) minDate = dateOfBirthNew;
+                        LocalDateTime dateOfBirthNew = format.parse(fields[4]).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                        if (dateOfBirthNew.isAfter(maxDate)) maxDate = dateOfBirthNew;
+                        if (dateOfBirthNew.isBefore(minDate)) minDate = dateOfBirthNew;
 
                 } catch (ParseException exc) {
                     ClientGUI.this.setStatusMessage(dateFormatError);
@@ -646,7 +659,7 @@ public class ClientGUI extends JFrame {
         idFrom.setText(String.valueOf(min[0])); idTo.setText(String.valueOf(max[0]));
         heightFrom.setText(String.valueOf(min[2])); heightTo.setText(String.valueOf(max[2]));
         weightFrom.setText(String.valueOf(min[3])); weightTo.setText(String.valueOf(max[3]));
-        dateOfBirthFrom.setText(format.format(minDate)); dateOfBirthTo.setText(format.format(maxDate));
+        dateOfBirthFrom.setDateTimePermissive(minDate); dateOfBirthTo.setDateTimePermissive(maxDate);
         xFrom.setText(String.valueOf(min[5])); xTo.setText(String.valueOf(max[5]));
         yFrom.setText(String.valueOf(min[6])); yTo.setText(String.valueOf(max[6]));
 
@@ -670,7 +683,7 @@ public class ClientGUI extends JFrame {
 
     public boolean[] checkFormat(String[] npcs) {
         boolean[] check = new boolean[npcs.length];
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         for (int i=0; i < npcs.length; i++) {
             String fields[] = npcs[i].split(" ");
             boolean fieldChecks[] = new boolean[fields.length];
@@ -723,19 +736,22 @@ public class ClientGUI extends JFrame {
                         }
                     } else {fieldChecks[3] = false;} }
 
-                if (dateOfBirthFrom.getText().equals("") && dateOfBirthTo.getText().equals(""))  {fieldChecks[4] =true; } else {
-                    if (!(fields[4].equals("null"))) {
 
-                        if ((dateOfBirthTo.getText().equals("")) || (dateOfBirthFrom.getText().equals(""))) {
-                            fieldChecks[4] = (dateOfBirthTo.getText().equals("")) && (format.parse(fields[4]).compareTo(format.parse((dateOfBirthFrom.getText()))) >= 0);
-                            if ((dateOfBirthFrom.getText().equals("")) && (format.parse(fields[4]).compareTo(format.parse((dateOfBirthTo.getText()))) <= 0))
-                                fieldChecks[4] = true;
-                        }
-                        if (!(dateOfBirthFrom.getText().equals("")) && !(dateOfBirthTo.getText().equals(""))) {
-                            if ((format.parse(dateOfBirthFrom.getText()).compareTo(format.parse(dateOfBirthTo.getText())) > 0)) ClientGUI.this.setStatusMessage(dateError);
-                            fieldChecks[4] = (format.parse(fields[4]).compareTo(format.parse((dateOfBirthFrom.getText()))) >= 0) && (format.parse(fields[4]).compareTo(format.parse((dateOfBirthTo.getText()))) <= 0);
-                        }
-                    } else {fieldChecks[4] = false;} }
+                    fieldChecks[4] = (dateOfBirthFrom.getDateTimePermissive().compareTo(format.parse(fields[4]).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()) <= 0) &&
+                            (dateOfBirthTo.getDateTimePermissive().compareTo(format.parse(fields[4]).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()) >= 0);
+//                if (dateOfBirthFrom.getText().equals("") && dateOfBirthTo.getText().equals(""))  {fieldChecks[4] =true; } else {
+//                    if (!(fields[4].equals("null"))) {
+//
+//                        if ((dateOfBirthTo.getText().equals("")) || (dateOfBirthFrom.getText().equals(""))) {
+//                            fieldChecks[4] = (dateOfBirthTo.getText().equals("")) && (format.parse(fields[4]).compareTo(format.parse((dateOfBirthFrom.getText()))) >= 0);
+//                            if ((dateOfBirthFrom.getText().equals("")) && (format.parse(fields[4]).compareTo(format.parse((dateOfBirthTo.getText()))) <= 0))
+//                                fieldChecks[4] = true;
+//                        }
+//                        if (!(dateOfBirthFrom.getText().equals("")) && !(dateOfBirthTo.getText().equals(""))) {
+//                            if ((format.parse(dateOfBirthFrom.getText()).compareTo(format.parse(dateOfBirthTo.getText())) > 0)) ClientGUI.this.setStatusMessage(dateError);
+//                            fieldChecks[4] = (format.parse(fields[4]).compareTo(format.parse((dateOfBirthFrom.getText()))) >= 0) && (format.parse(fields[4]).compareTo(format.parse((dateOfBirthTo.getText()))) <= 0);
+//                        }
+//                    } else {fieldChecks[4] = false;} }
 
 
 
@@ -846,6 +862,35 @@ public class ClientGUI extends JFrame {
         labelStop.setText(bundle.getString("labelStop"));
 
         languageMenu.changeLanguage(locale);
+
+        nestedDateOfBirth.removeAll();
+        nestedDateOfBirthFrom.removeAll();
+        nestedDateOfBirthTo.removeAll();
+        nestedDateOfBirth.setLayout(new GridLayout(1,2));
+
+
+        DatePickerSettings dps1 = new DatePickerSettings(locale);
+        TimePickerSettings tps1 = new TimePickerSettings(locale);
+
+        LocalDateTime oldTimeFrom = dateOfBirthFrom.getDateTimePermissive();
+        dateOfBirthFrom = new DateTimePicker(dps1, tps1);
+        dateOfBirthFrom.setDateTimePermissive(oldTimeFrom);
+
+
+        DatePickerSettings dps2 = new DatePickerSettings(locale);
+        TimePickerSettings tps2 = new TimePickerSettings(locale);
+
+        LocalDateTime oldTimeTo = dateOfBirthTo.getDateTimePermissive();
+        dateOfBirthTo = new DateTimePicker(dps2, tps2);
+        dateOfBirthTo.setDateTimePermissive(oldTimeTo);
+
+
+
+        nestedDateOfBirthFrom.add(dateOfBirthFrom);
+        nestedDateOfBirthTo.add(dateOfBirthTo);
+
+        nestedDateOfBirth.add(nestedDateOfBirthFrom);
+        nestedDateOfBirth.add(nestedDateOfBirthTo);
     }
 
     public String getServerUnav () {

@@ -64,11 +64,11 @@ public class Main {
             EventQueue.invokeLater(() -> serverGUI.setVisible(true));
         }
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                mode.saveToDB();
-            }
-        });
+//        Runtime.getRuntime().addShutdownHook(new Thread() {
+//            public void run() {
+//                mode.saveToDB();
+//            }
+//        });
 
         mode.inputFromDB();
         serverGUI.setNpcId(mode.getCurrId()+1);
@@ -105,10 +105,10 @@ public class Main {
                         additionalData = "";
 
                     switch (command.toLowerCase()) {
-                        case "save": {
-                            mode.saveToDB();
-                            break;
-                        }
+//                        case "save": {
+//                            mode.saveToDB();
+//                            break;
+//                        }
                         case "clear": {
                             mode.clear();
                             serverGUI.addListeners(mode.getNpcs());
@@ -128,6 +128,7 @@ public class Main {
 //                            finally {
 //                                break;
 //                            }
+                            break;
                         }
 
                         case "change": {
