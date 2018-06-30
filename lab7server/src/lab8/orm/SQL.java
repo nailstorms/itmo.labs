@@ -1,10 +1,10 @@
 package lab8.orm;
 
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.sql.ResultSet;
-import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,8 +32,8 @@ public class SQL<T> {
                     type = "integer";
                 else if (f.getType() == double.class || f.getType() == Double.class)
                     type = "double precision";
-                else if (f.getType() == OffsetDateTime.class || f.getType() == ZonedDateTime.class)
-                    type = "timestamptz";
+                else if (f.getType() == LocalDateTime.class)
+                    type = "timestamp";
 
                 columnsWithType.put(f.getName(), type);
 
@@ -137,16 +137,16 @@ public class SQL<T> {
                 for (String column : columnsWithType.keySet()) {
                     Field f = tableClass.getField(column);
 
-                    if (f.getType() == String.class)
+                    if (results.getObject(column) == null)
+                        f.set(object, null);
+                    else if (f.getType() == String.class)
                         f.set(object, results.getString(column));
                     else if (f.getType() == int.class || f.getType() == Integer.class)
                         f.set(object, results.getInt(column));
                     else if (f.getType() == double.class || f.getType() == Double.class)
                         f.set(object, results.getDouble(column));
-                    else if (f.getType() == OffsetDateTime.class)
-                        f.set(object, OffsetDateTime.parse(results.getString(column), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX")));
-                    else if (f.getType() == ZonedDateTime.class)
-                        f.set(object, ZonedDateTime.parse(results.getString(column), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX")));
+                    else if (f.getType() == LocalDateTime.class)
+                        f.set(object, LocalDateTime.parse(results.getString(column), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                     else if (f.getType().isEnum())
                         f.set(object, Enum.valueOf((Class<Enum>) f.getType(), results.getString(column)));
                 }
@@ -163,16 +163,16 @@ public class SQL<T> {
         try {
             Object result = field.get(object);
 
+            if (result == null)
+                return null;
             if (result instanceof String)
                 return "'" + result + "'";
             else if (Integer.class.isInstance(result))
                 return Integer.toString((int) result);
             else if (Double.class.isInstance(result))
                 return Double.toString((double) result);
-            else if (result instanceof OffsetDateTime)
-                return "'" + ((OffsetDateTime) result).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX")) + "'";
-            else if (result instanceof ZonedDateTime)
-                return "'" + ((ZonedDateTime) result).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX")) + "'";
+            else if (result instanceof LocalDateTime)
+                return "'" + ((LocalDateTime) result).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "'";
             else if (field.getType().isEnum())
                 return "'" + result.toString() + "'";
             else return null;

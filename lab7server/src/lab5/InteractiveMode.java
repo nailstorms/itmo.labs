@@ -8,17 +8,20 @@ import lab8.orm.SQL;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class InteractiveMode {
     private LinkedBlockingDeque<NPC> npcs = new LinkedBlockingDeque<>();
-    Gson gson = new GsonBuilder().registerTypeAdapter(OffsetDateTime.class,
-            (JsonDeserializer<OffsetDateTime>) (json, type, jsonDeserializationContext) ->
-                    OffsetDateTime.parse(json.getAsJsonPrimitive().getAsString(), DateTimeFormatter.ISO_OFFSET_DATE_TIME)).registerTypeAdapter(OffsetDateTime.class,
-            (JsonSerializer<OffsetDateTime>) (date, type, jsonSerializationContext) ->
-                    new JsonPrimitive(date.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))).create();
+    Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class,
+            (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) ->
+                    LocalDateTime.parse(json.getAsJsonPrimitive().getAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))).registerTypeAdapter(LocalDateTime.class,
+            (JsonSerializer<LocalDateTime>) (date, type, jsonSerializationContext) ->
+                    new JsonPrimitive(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))).create();
+
+    int currId;
 
     SQL<NPC> sql = new SQL<>(NPC.class);
     DB db = new DB("jdbc:postgresql://localhost:5432/lab8", "nailstorm", "qwerty");
@@ -37,6 +40,8 @@ public class InteractiveMode {
         try  {
 
             npcs = new LinkedBlockingDeque<>(sql.resultsToObjects(db.fetch(sql.selectAll())));
+            for (NPC npc : npcs)
+                currId = npc.getId();
 
             return true;
 
@@ -107,6 +112,7 @@ public class InteractiveMode {
      */
 
     public String removeFirst() {
+        npcs = new LinkedBlockingDeque<>(sql.resultsToObjects(db.fetch(sql.selectAll())));
         if (npcs.isEmpty())
             return "Collection is already empty - nothing to remove.";
         else {
@@ -115,40 +121,6 @@ public class InteractiveMode {
         }
     }
 
-
-    /**
-     * justNPCInput() invokes an NPC creator;
-     *
-     * @return NPC if the operation was successful, otherwise return null (if there were some errors in input
-     * i.e. beauty level is out of scope).
-     */
-
-    public NPC justNPCInput(String data) {
-        try {
-
-            String userBsNpc = jsonNPCHandler(data);
-            NPC newNPC = gson.fromJson(userBsNpc, NPC.class);
-
-            if (newNPC.getNPCName() == null)
-                throw new JsonParseException("");
-
-            return newNPC;
-
-        } catch (JsonSyntaxException exc) {
-            System.err.println("An unexpected error has occurred. Check input syntax.");
-        } catch (JsonParseException exc) {
-            System.err.println("Typed object's name is null. " +
-                    "Object should have a significant name.");
-        }
-        return null;
-    }
-
-    public String jsonNPCHandler (String jsonNPC) {
-
-            String resultNPC = jsonNPC.replace("\n", "");
-            return resultNPC;
-
-    }
 
 
     /**
@@ -172,8 +144,8 @@ public class InteractiveMode {
                 }
             }
             if(indicator == 0) {
-                npcs.add(newNPC);
-                db.executeUpdate(sql.insert(newNPC));
+                currId = db.executeUpdateGetId(sql.insert(newNPC));
+                npcs = new LinkedBlockingDeque<>(sql.resultsToObjects(db.fetch(sql.selectAll())));
             }
             else
                 return "Element with such id has already been found.";
@@ -181,6 +153,7 @@ public class InteractiveMode {
             return "Element has been successfully added.";
 
         } catch (NullPointerException exc) {
+            exc.printStackTrace();
             return "The object you are trying to add is null (missing name or incorrect input). " +
                     "Please try again.";
         }
@@ -196,9 +169,8 @@ public class InteractiveMode {
                 if(allNpcs.getId() == npcId) {
                     System.out.println(allNpcs.getId());
                     indicator++;
-                    npcs.remove(allNpcs);
-                    npcs.add(newNPC);
                     db.execute(sql.update(newNPC));
+                    npcs = new LinkedBlockingDeque<>(sql.resultsToObjects(db.fetch(sql.selectAll())));
                     break;
                 }
             }
@@ -231,8 +203,8 @@ public class InteractiveMode {
                 int npcId = checkNPC.getId();
                 for (NPC allNpcs : npcs) {
                     if(allNpcs.getId() == npcId) {
-                        npcs.remove(allNpcs);
                         db.execute(sql.delete(allNpcs));
+                        npcs = new LinkedBlockingDeque<>(sql.resultsToObjects(db.fetch(sql.selectAll())));
                         return "Element has been removed.";
                     }
                 }
@@ -247,6 +219,9 @@ public class InteractiveMode {
     }
 
 
+    public int getCurrId() {
+        return currId;
+    }
 
     public boolean checkForEmptiness () {
             return npcs.isEmpty();

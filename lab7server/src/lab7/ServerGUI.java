@@ -1,25 +1,15 @@
 package lab7;
 
+import lab3.NPC;
+
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.LinkedBlockingDeque;
-import lab3.*;
 
 public class ServerGUI extends JFrame {
 
@@ -72,7 +62,7 @@ public class ServerGUI extends JFrame {
     private JComboBox npcBeautyLevel;
     private JComboBox npcChinSharpness;
 
-    JScrollPane scrollPane = new JScrollPane(middleCollectionPanel);
+    private JScrollPane scrollPane = new JScrollPane(middleCollectionPanel);
 
 //    JPanel upperCommandPanel = new JPanel();
 //    JPanel middleCollectionPanel = new JPanel();
@@ -98,10 +88,8 @@ public class ServerGUI extends JFrame {
 //
 //    JScrollPane scrollPane = new JScrollPane();
 
-    private boolean wantedToBeExecuted;
-    private boolean wantedToBeClosed = false;
-
-
+    private volatile boolean wantedToBeExecuted;
+    private volatile boolean wantedToBeClosed = false;
 
     public ServerGUI() {
         super("Lab task 7 - server collection manager");
@@ -125,53 +113,61 @@ public class ServerGUI extends JFrame {
         this.setJMenuBar(menuBar);
 
         JLabel idLabel = new JLabel("ID:");
-        c.gridy = 1; c.gridx = 1;
+        c.gridy = 1;
+        c.gridx = 1;
         leftElementInputPanel.add(idLabel, c);
         c.gridx = 2;
         leftElementInputPanel.add(npcId, c);
 
         JLabel nameLabel = new JLabel("Name:");
-        c.gridy = 2; c.gridx = 1;
+        c.gridy = 2;
+        c.gridx = 1;
         leftElementInputPanel.add(nameLabel, c);
         c.gridx = 2;
         leftElementInputPanel.add(npcName, c);
 
         JLabel dobLabel = new JLabel("Date of birth:");
-        c.gridy = 3; c.gridx = 1;
+        c.gridy = 3;
+        c.gridx = 1;
         leftElementInputPanel.add(dobLabel, c);
         c.gridx = 2;
-        leftElementInputPanel.add(npcDoB,c);
+        leftElementInputPanel.add(npcDoB, c);
 
         JLabel heightLabel = new JLabel("Height:");
-        c.gridy = 4; c.gridx = 1;
+        c.gridy = 4;
+        c.gridx = 1;
         leftElementInputPanel.add(heightLabel, c);
         c.gridx = 2;
-        leftElementInputPanel.add(npcHeight,c);
+        leftElementInputPanel.add(npcHeight, c);
 
         JLabel weightLabel = new JLabel("Weight:");
-        c.gridy = 5; c.gridx = 1;
+        c.gridy = 5;
+        c.gridx = 1;
         leftElementInputPanel.add(weightLabel, c);
         c.gridx = 2;
-        leftElementInputPanel.add(npcWeight,c);
+        leftElementInputPanel.add(npcWeight, c);
 
         JLabel labelX = new JLabel("X:");
-        c.gridy = 6; c.gridx = 1;
+        c.gridy = 6;
+        c.gridx = 1;
         leftElementInputPanel.add(labelX, c);
         c.gridx = 2;
-        leftElementInputPanel.add(npcX,c);
+        leftElementInputPanel.add(npcX, c);
 
 
         JLabel labelY = new JLabel("Y:");
-        c.gridy = 7; c.gridx = 1;
+        c.gridy = 7;
+        c.gridx = 1;
         leftElementInputPanel.add(labelY, c);
         c.gridx = 2;
-        leftElementInputPanel.add(npcY,c);
+        leftElementInputPanel.add(npcY, c);
 
         JLabel labelColor = new JLabel("Color:");
-        c.gridy = 8; c.gridx = 1;
+        c.gridy = 8;
+        c.gridx = 1;
         leftElementInputPanel.add(labelColor, c);
         c.gridx = 2;
-        leftElementInputPanel.add(npcColor,c);
+        leftElementInputPanel.add(npcColor, c);
 
         String[] beautyLevels = {"", "Hideous", "Normal", "Beautiful"};
         String[] chinSharpnesses = {"", "Flat", "Normal", "Sharp"};
@@ -179,26 +175,27 @@ public class ServerGUI extends JFrame {
         npcChinSharpness = new JComboBox(chinSharpnesses);
 
         JLabel labelBeauties = new JLabel("Beauty level:");
-        c.gridy = 9; c.gridx = 1;
+        c.gridy = 9;
+        c.gridx = 1;
         leftElementInputPanel.add(labelBeauties, c);
         c.gridx = 2;
-        leftElementInputPanel.add(npcBeautyLevel,c);
+        leftElementInputPanel.add(npcBeautyLevel, c);
 
         JLabel labelChinaNumberOne = new JLabel("Chin sharpness:");
-        c.gridy = 10; c.gridx = 1;
+        c.gridy = 10;
+        c.gridx = 1;
         leftElementInputPanel.add(labelChinaNumberOne, c);
         c.gridx = 2;
-        leftElementInputPanel.add(npcChinSharpness,c);
+        leftElementInputPanel.add(npcChinSharpness, c);
 
 
         rightCommandPanel.setBackground(Color.LIGHT_GRAY);
-        rightCommandPanel.setLayout(new GridLayout(15,1));
+        rightCommandPanel.setLayout(new GridLayout(15, 1));
 
         rightCommandPanel.add(new JPanel());
         nestedAddElement.add(addElement);
         rightCommandPanel.add(nestedAddElement);
         rightCommandPanel.add(new JPanel());
-
 
 
         nestedRemoveFirst.add(removeFirstElement);
@@ -230,17 +227,16 @@ public class ServerGUI extends JFrame {
         rightCommandPanel.add(new JPanel());
 
 
-
         guiHelp.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JDialog information = new JDialog(new JFrame(),"Info");
+                JDialog information = new JDialog(new JFrame(), "Info");
                 information.setLocation(500, 100);
-                information.setSize(850,315);
+                information.setSize(850, 315);
                 information.setLayout(new FlowLayout());
 
                 JLabel intro = new JLabel("Some useful information about collection manager:");
-                intro.setFont(new Font("Droid Serif",Font.BOLD,16));
+                intro.setFont(new Font("Droid Serif", Font.BOLD, 16));
 
                 JLabel collectionView = new JLabel("You view the collection as a tree. Each element is introduced by" +
                         " its fields. \n");
@@ -259,7 +255,7 @@ public class ServerGUI extends JFrame {
 
                 JPanel nestedCommandsIntro = new JPanel();
                 JLabel commandsIntro = new JLabel("Information about commands: \n");
-                commandsIntro.setFont(new Font("Droid Serif",Font.BOLD,16));
+                commandsIntro.setFont(new Font("Droid Serif", Font.BOLD, 16));
 
                 JLabel labelCommands1 = new JLabel("On the right part of the screen addition/removal commands can be seen.\n");
                 JLabel labelCommands2 = new JLabel("To add the element to collection, press \"Add/change element\". If there is already an element with such" +
@@ -315,98 +311,6 @@ public class ServerGUI extends JFrame {
                 wantedToBeExecuted = true;
             }
         });
-    }
-
-    public NPCTree createTree (LinkedBlockingDeque<NPC> npcs, String defaultNode) {
-        boolean isExpanded = false;
-        if (myTree != null) {
-            for(MouseListener listener : myTree.getMouseListeners())
-                myTree.removeMouseListener(listener);
-
-            isExpanded = myTree.isExpanded(0);
-        }
-        myTree = new NPCTree(defaultNode);
-        DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) myTree.getModel().getRoot();
-
-        for(NPC readNPCs : npcs) {
-//            rootNode.add(new DefaultMutableTreeNode("ID: " + readNPCs.getId() + ". Name: " + readNPCs.getNPCName()));
-            rootNode.add(new DefaultMutableTreeNode(readNPCs));
-        }
-
-        this.middleCollectionPanel.remove(scrollPane);
-        this.middleCollectionPanel.revalidate();
-
-        myTree.setPreferredSize(new Dimension(720, 300));
-        scrollPane.getViewport().add(myTree);
-        this.middleCollectionPanel.add(scrollPane);
-        this.middleCollectionPanel.repaint();
-
-
-        if (isExpanded) myTree.expandRow(0);
-
-        myTree.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                int row = myTree.getRowForLocation(e.getX(), e.getY());
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode) myTree.getLastSelectedPathComponent();
-                if (row != -1) {
-                    if(node.isLeaf() && e.getClickCount() == 1) {
-                        changeElement.setVisible(true);
-                        removeElement.setVisible(true);
-                       NPC npc = (NPC) node.getUserObject();
-                       npcId.setText(npc.getId().toString());
-                       npcName.setText(npc.getNPCName());
-                       npcHeight.setText(Integer.toString(npc.getHeight()));
-                       npcWeight.setText(Integer.toString(npc.getWeight()));
-                       if (npc.getDateOfBirth()!=null)
-                        npcDoB.setText(npc.getDateOfBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                       else
-                           npcDoB.setText("");
-                       npcX.setText(Integer.toString(npc.getNpcX()));
-                       npcY.setText(Integer.toString(npc.getNpcY()));
-                       npcColor.setText(npc.getColor());
-                       if(npc.getBeauty()!=null)
-                        npcBeautyLevel.setSelectedItem(npc.getBeauty().toString());
-                       else
-                           npcBeautyLevel.setSelectedItem("");
-                       if(npc.getChin()!=null)
-                            npcChinSharpness.setSelectedItem(npc.getChin().toString());
-                       else
-                           npcChinSharpness.setSelectedItem("");
-                    }
-                }
-            }
-        });
-
-        return myTree;
-    }
-
-
-
-    public void addListeners(LinkedBlockingDeque<NPC> npcs) {
-        for(ActionListener listener : readFromFile.getActionListeners())
-            readFromFile.removeActionListener(listener);
-        for(ActionListener listener : saveToFile.getActionListeners())
-            saveToFile.removeActionListener(listener);
-
-        readFromFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                removeElement.setVisible(false);
-                changeElement.setVisible(false);
-                ServerGUI.this.createTree(npcs, "Collection");
-            }
-        });
-
-        saveToFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                removeElement.setVisible(false);
-                changeElement.setVisible(false);
-                commandToExecute = "save";
-                wantedToBeExecuted = true;
-            }
-        });
 
         addElement.addMouseListener(new MouseAdapter() {
             @Override
@@ -442,10 +346,101 @@ public class ServerGUI extends JFrame {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 changeElement.setVisible(false);
+                removeElement.setVisible(false);
                 commandToExecute = "clear";
                 wantedToBeExecuted = true;
             }
         });
+    }
+
+    public NPCTree createTree(LinkedBlockingDeque<NPC> npcs, String defaultNode) {
+        boolean isExpanded = false;
+        if (myTree != null) {
+            for (MouseListener listener : myTree.getMouseListeners())
+                myTree.removeMouseListener(listener);
+
+            isExpanded = myTree.isExpanded(0);
+        }
+        myTree = new NPCTree(defaultNode);
+        DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) myTree.getModel().getRoot();
+
+        for (NPC readNPCs : npcs) {
+//            rootNode.add(new DefaultMutableTreeNode("ID: " + readNPCs.getId() + ". Name: " + readNPCs.getNPCName()));
+            rootNode.add(new DefaultMutableTreeNode(readNPCs));
+        }
+
+        this.middleCollectionPanel.remove(scrollPane);
+        this.middleCollectionPanel.revalidate();
+
+        myTree.setPreferredSize(new Dimension(720, 300));
+        scrollPane.getViewport().add(myTree);
+        this.middleCollectionPanel.add(scrollPane);
+        this.middleCollectionPanel.repaint();
+
+
+        if (isExpanded) myTree.expandRow(0);
+
+        myTree.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int row = myTree.getRowForLocation(e.getX(), e.getY());
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) myTree.getLastSelectedPathComponent();
+                if (row != -1 && node.isLeaf() && !node.isRoot() && e.getClickCount() == 1) {
+                    changeElement.setVisible(true);
+                    removeElement.setVisible(true);
+                    NPC npc = (NPC) node.getUserObject();
+                    npcId.setText(npc.getId().toString());
+                    npcName.setText(npc.getNPCName());
+                    npcHeight.setText(Integer.toString(npc.getHeight()));
+                    npcWeight.setText(Integer.toString(npc.getWeight()));
+                    if (npc.getDateOfBirth() != null)
+                        npcDoB.setText(npc.getDateOfBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                    else
+                        npcDoB.setText("");
+                    npcX.setText(Integer.toString(npc.getNpcX()));
+                    npcY.setText(Integer.toString(npc.getNpcY()));
+                    npcColor.setText(npc.getColor());
+                    if (npc.getBeauty() != null)
+                        npcBeautyLevel.setSelectedItem(npc.getBeauty().toString());
+                    else
+                        npcBeautyLevel.setSelectedItem("");
+                    if (npc.getChin() != null)
+                        npcChinSharpness.setSelectedItem(npc.getChin().toString());
+                    else
+                        npcChinSharpness.setSelectedItem("");
+                }
+            }
+        });
+
+        return myTree;
+    }
+
+
+    public void addListeners(LinkedBlockingDeque<NPC> npcs) {
+        for (ActionListener listener : readFromFile.getActionListeners())
+            readFromFile.removeActionListener(listener);
+        for (ActionListener listener : saveToFile.getActionListeners())
+            saveToFile.removeActionListener(listener);
+
+        readFromFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeElement.setVisible(false);
+                changeElement.setVisible(false);
+                ServerGUI.this.createTree(npcs, "Collection");
+            }
+        });
+
+        saveToFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeElement.setVisible(false);
+                changeElement.setVisible(false);
+                commandToExecute = "save";
+                wantedToBeExecuted = true;
+            }
+        });
+
     }
 
     public String commandToExecute() {
@@ -482,7 +477,7 @@ public class ServerGUI extends JFrame {
         if (characteristics[9].equals("") || characteristics[9].equals("NPC's color"))
             characteristics[9] = null;
 
-        if(commandToExecute.equals("add")) {
+        if (commandToExecute.equals("add")) {
             if (characteristics[1].equals("") || characteristics[1].equals("NPC's name")) {
                 this.setOperationsStatus("Name cannot be null!");
                 return "no";
@@ -497,44 +492,44 @@ public class ServerGUI extends JFrame {
             this.setOperationsStatus("ID cannot be null!");
             return "no";
         } else {
-                if (commandToExecute.equals("remove_first") || commandToExecute.equals("clear") || commandToExecute.equals("save"))
-                    return commandToExecute;
-                else {
-                    if (commandToExecute.equals("remove")) {
-                        return commandToExecute + " {\"id\":" + characteristics[0] + "}";
-                    } else {
-                        try {
-                            int fieldsInt;
-                            for (int i = 0; i < 7; i++) {
-                                if (characteristics[i] != null)
-                                    fieldsInt = Integer.parseInt(characteristics[i]);
+            if (commandToExecute.equals("remove_first") || commandToExecute.equals("clear") || commandToExecute.equals("save"))
+                return commandToExecute;
+            else {
+                if (commandToExecute.equals("remove")) {
+                    return commandToExecute + " {\"id\":" + characteristics[0] + "}";
+                } else {
+                    try {
+                        int fieldsInt;
+                        for (int i = 0; i < 7; i++) {
+                            if (characteristics[i] != null)
+                                fieldsInt = Integer.parseInt(characteristics[i]);
 
-                                if (i == 0 || i == 3) i++;
-                            }
-                            if(characteristics[4]!=null) {
-                                OffsetDateTime odt = OffsetDateTime.of(LocalDateTime.parse(characteristics[4],
-                                        DateTimeFormatter.ISO_LOCAL_DATE_TIME),  OffsetDateTime.now(ZoneId.systemDefault()).getOffset());
+                            if (i == 0 || i == 3) i++;
+                        }
+                        if (characteristics[4] != null) {
+                            LocalDateTime ldt = LocalDateTime.parse(characteristics[4], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+//                                OffsetDateTime odt = OffsetDateTime.of(LocalDateTime.parse(characteristics[4],
+//                                        DateTimeFormatter.ISO_LOCAL_DATE_TIME),  OffsetDateTime.now(ZoneId.systemDefault()).getOffset());
 //                                OffsetDateTime odt = OffsetDateTime.parse(characteristics[4], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                            }
-                        }   catch (NumberFormatException exc) {
-                                ServerGUI.this.setOperationsStatus("Numeric fields must be integer.");
-                                return "no";
-                            }
-                            catch (DateTimeParseException exc) {
-                                ServerGUI.this.setOperationsStatus("Incorrect date format.");
-                                return "no";
-                            }
-                    }
-
-                        return commandToExecute + " " +
-                                "{\"levels\":{\"beauty\":" + characteristics[7] + ",\"" + "chin\":" + characteristics[8] + "}," +
-                                "\"name\":\"" + characteristics[1] + "\"," + "\"height\":" + characteristics[2] +
-                                ",\"weight\":" + characteristics[3] + ",\"dateOfBirth\":\"" + characteristics[4] + "\"," +
-                                "\"x\":" + characteristics[5] + ",\"y\":" + characteristics[6] + ",\"id\":" + characteristics[0] + ",\"color\":" + characteristics[9] + "}";
+                        }
+                    } catch (NumberFormatException exc) {
+                        ServerGUI.this.setOperationsStatus("Numeric fields must be integer.");
+                        return "no";
+                    } catch (DateTimeParseException exc) {
+                        ServerGUI.this.setOperationsStatus("Incorrect date format.");
+                        return "no";
                     }
                 }
 
+                return commandToExecute + " " +
+                        "{\"beauty\":" + characteristics[7] + ",\"" + "chin\":" + characteristics[8] + "," +
+                        "\"name\":\"" + characteristics[1] + "\"," + "\"height\":" + characteristics[2] +
+                        ",\"weight\":" + characteristics[3] + ",\"dateOfBirth\":" + (characteristics[4] == null ? null : "\"" + characteristics[4] + "\"") + "," +
+                        "\"x\":" + characteristics[5] + ",\"y\":" + characteristics[6] + ",\"id\":" + characteristics[0] + ",\"color\":" + characteristics[9] + "}";
             }
+        }
+
+    }
 
 
 //        if (commandToExecute.equals("remove_first") || commandToExecute.equals("clear") || commandToExecute.equals("save"))
@@ -564,13 +559,17 @@ public class ServerGUI extends JFrame {
         return wantedToBeClosed;
     }
 
-    public String getCommandToExecute () {
+    public String getCommandToExecute() {
         return commandToExecute;
     }
 
-    public void setOperationsStatus (String status) {
+    public void setOperationsStatus(String status) {
         operationsStatus.setText(status);
         ServerGUI.this.invalidate();
+    }
+
+    public void setNpcId(int id) {
+        npcId.setText(Integer.toString(id));
     }
 
 }

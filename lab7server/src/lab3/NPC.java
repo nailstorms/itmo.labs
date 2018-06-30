@@ -5,6 +5,7 @@ import lab8.orm.Table;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.Objects;
@@ -19,7 +20,7 @@ public class NPC implements Comparable<NPC>, Serializable {
     public double height;
     public double weight;
 
-    public OffsetDateTime dateOfBirth = OffsetDateTime.now();
+    public LocalDateTime dateOfBirth = LocalDateTime.now();
     public double x = 0;
     public double y = 0;
     public String color;
@@ -80,7 +81,7 @@ public class NPC implements Comparable<NPC>, Serializable {
     }
 
 
-    public NPC (int id, String name, double height, OffsetDateTime date, double beauty, double chin){
+    public NPC (int id, String name, double height, LocalDateTime date, double beauty, double chin){
         this.name = name;
         this.height = height;
         this.dateOfBirth = date;
@@ -106,7 +107,7 @@ public class NPC implements Comparable<NPC>, Serializable {
         }
     }
 
-    public NPC (String name, double height, OffsetDateTime date, double beauty, double chin){
+    public NPC (String name, double height, LocalDateTime date, double beauty, double chin){
         this.name = name;
         this.height = height;
         this.dateOfBirth = date;
@@ -131,7 +132,7 @@ public class NPC implements Comparable<NPC>, Serializable {
         }
     }
 
-    public NPC (int id, String name, double height, OffsetDateTime date, double beauty, double chin, double x, double y){
+    public NPC (int id, String name, double height, LocalDateTime date, double beauty, double chin, double x, double y){
         this.name = name;
         this.height = height;
         this.x = x;
@@ -159,7 +160,7 @@ public class NPC implements Comparable<NPC>, Serializable {
         }
     }
 
-    public NPC (String name, double height, OffsetDateTime date, double beauty, double chin, double x, double y){
+    public NPC (String name, double height, LocalDateTime date, double beauty, double chin, double x, double y){
         this.name = name;
         this.height = height;
         this.x = x;
@@ -254,7 +255,7 @@ public class NPC implements Comparable<NPC>, Serializable {
         return (int) this.height;
     }
 
-    public OffsetDateTime getDateOfBirth() {
+    public LocalDateTime getDateOfBirth() {
         return this.dateOfBirth;
     }
 

@@ -11,8 +11,6 @@ import lab8.orm.SQL;
 
 import java.awt.*;
 import java.io.File;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -21,7 +19,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public class Main {
 
-    public static final String filepath = System.getenv("PathToIOFile");
     public static final String IPAddress = System.getenv("IPAddress");
     public static final int PortNumber = Integer.parseInt(System.getenv("PortNumber"));
 
@@ -74,7 +71,9 @@ public class Main {
         });
 
         mode.inputFromDB();
+        serverGUI.setNpcId(mode.getCurrId()+1);
         serverGUI.addListeners(mode.getNpcs());
+
 
         new Thread(()-> {
             while (true) {
@@ -91,8 +90,10 @@ public class Main {
 
             new Thread(() -> {
                 String datax = "";
-                if(serverGUI.isWantedToBeExecuted()) {
-                    datax = serverGUI.commandToExecute();
+                synchronized (serverGUI) {
+                    if (serverGUI.isWantedToBeExecuted()) {
+                        datax = serverGUI.commandToExecute();
+                    }
                 }
                 if(!datax.equals("no")) {
                     String[] cmd = datax.split(" ", 2);
@@ -116,16 +117,17 @@ public class Main {
                             break;
                         }
                         case "add": {
-                            try {
+//                            try {
                                 serverGUI.setOperationsStatus(mode.addElement(additionalData));
+                                serverGUI.setNpcId(mode.getCurrId()+1);
                                 serverGUI.addListeners(mode.getNpcs());
                                 serverGUI.createTree(mode.getNpcs(), "Collection");
-                            } catch (DateTimeParseException exc) {
-                                serverGUI.setOperationsStatus("Incorrect date format.");
-                            }
-                            finally {
-                                break;
-                            }
+//                            } catch (DateTimeParseException exc) {
+//                                serverGUI.setOperationsStatus("Incorrect date format.");
+//                            }
+//                            finally {
+//                                break;
+//                            }
                         }
 
                         case "change": {

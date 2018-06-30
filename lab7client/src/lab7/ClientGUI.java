@@ -602,7 +602,7 @@ public class ClientGUI extends JFrame {
         int max[] = {-30000,-30000,-30000,-30000,-30000,-30000,-30000,-30000,-30000,-30000};
         int min[] = {30000,30000,30000,30000,30000,30000,30000,30000,30000,30000};
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar maxDateCal = Calendar.getInstance();
         Calendar minDateCal = Calendar.getInstance();
         maxDateCal.set(1800,Calendar.JANUARY,1);
@@ -670,7 +670,7 @@ public class ClientGUI extends JFrame {
 
     public boolean[] checkFormat(String[] npcs) {
         boolean[] check = new boolean[npcs.length];
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (int i=0; i < npcs.length; i++) {
             String fields[] = npcs[i].split(" ");
             boolean fieldChecks[] = new boolean[fields.length];
