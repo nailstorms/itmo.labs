@@ -46,8 +46,8 @@ public class ServerGUI extends JFrame {
 
     private JMenuBar menuBar = new JMenuBar();
     private JMenu fileHandling = new JMenu("File");
-    private JMenuItem readFromFile = new JMenuItem("Read collection from database");
-    private JMenuItem saveToFile = new JMenuItem("Save collection to database");
+    private JMenuItem readFromFile = new JMenuItem("Read collection from file and upload to database");
+    private JMenuItem saveToFile = new JMenuItem("Save collection to file");
     private JMenuItem exitGui = new JMenuItem("Exit");
     private JMenu guiHelp = new JMenu("Help");
 
@@ -427,7 +427,9 @@ public class ServerGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 removeElement.setVisible(false);
                 changeElement.setVisible(false);
-                ServerGUI.this.createTree(npcs, "Collection");
+                commandToExecute = "read";
+                wantedToBeExecuted = true;
+//                ServerGUI.this.createTree(npcs, "Collection");
             }
         });
 

@@ -15,6 +15,8 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public class InteractiveMode {
     private LinkedBlockingDeque<NPC> npcs = new LinkedBlockingDeque<>();
+    private LinkedBlockingDeque<NPC> intermediateNpcs = new LinkedBlockingDeque<>();
+
     Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class,
             (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) ->
                     LocalDateTime.parse(json.getAsJsonPrimitive().getAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))).registerTypeAdapter(LocalDateTime.class,
@@ -40,8 +42,7 @@ public class InteractiveMode {
         try  {
 
             npcs = new LinkedBlockingDeque<>(sql.resultsToObjects(db.fetch(sql.selectAll())));
-
-                currId = npcs.peekLast().getId();
+            currId = npcs.peekLast().getId();
 
             return true;
 
@@ -51,19 +52,59 @@ public class InteractiveMode {
         return false;
     }
 
+    public boolean inputFromFileToDB(File file) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+
+            String someBS;
+            NPC readNPCs;
+
+            intermediateNpcs.clear();
+
+            while ((someBS = reader.readLine()) != null) {
+                {
+                    try {
+                        readNPCs = gson.fromJson(someBS, NPC.class);
+                        intermediateNpcs.add(readNPCs);
+
+                    } catch (Exception exc) {
+                        System.err.println("An unexpected exception has occurred " + someBS);
+                    }
+                }
+            }
+
+            for (NPC npc : intermediateNpcs)
+                db.executeUpdate(sql.insert(npc));
+
+            npcs = new LinkedBlockingDeque<>(sql.resultsToObjects(db.fetch(sql.selectAll())));
+            currId = npcs.peekLast().getId();
+
+            return true;
+
+        } catch (FileNotFoundException exc) {
+            System.err.printf("File %s was not found\n", file.getName());
+        } catch (IOException exc) {
+            System.err.println("An unexpected exception with I/O has occurred. Please try again.");
+        }
+        return false;
+    }
+
+
+
     /**
      * saveToFile saves the collection of class NPC in the {@code file} in JSON;
      *
+     * @param file is the output file where the objects will be stored;
      * @return true if the saving to {@code file} operation was successful.
      */
 
-    public boolean saveToDB() {
-        try {
-            db.execute(sql.deleteAll());
-            for (NPC npc : npcs)
-                db.executeUpdate(sql.insert(npc));
+    public boolean saveToFile(File file) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            synchronized (npcs) {
+                for (NPC readNPCs : npcs)
+                    writer.write(gson.toJson(readNPCs) + '\n');
+            }
             return true;
-        } catch (Exception exc) {
+        } catch (IOException exc) {
             System.err.println("An unexpected exception with I/O has occurred. Please try again.");
         }
 
