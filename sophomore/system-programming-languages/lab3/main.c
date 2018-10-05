@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "lab3Library.h"
 
+int x[], y[];
 
 int main() {
     size_t axis_n;
