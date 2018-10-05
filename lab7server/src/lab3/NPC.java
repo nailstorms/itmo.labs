@@ -229,7 +229,7 @@ public class NPC implements Comparable<NPC>, Serializable {
 
     @Override
     public String toString(){
-        return id + " " + name + " " + height + " " + weight + " " + dateOfBirth + " " + x + " " + y + " " + this.getBeauty() + " " + this.getChin() + " " + color;
+        return id + "; " + name + "; " + height + "; " + weight + "; " + dateOfBirth + "; " + x + "; " + y + "; " + this.getBeauty() + "; " + this.getChin() + "; " + color;
     }
 
     @Override

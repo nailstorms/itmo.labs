@@ -9,10 +9,14 @@ import com.github.lgooddatepicker.components.TimePickerSettings;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.Field;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.Timer;
@@ -104,7 +108,7 @@ public class ClientGUI extends JFrame {
     private JTextField nameCurrentValue = new JTextField(5);
     private JTextField heightCurrentValue = new JTextField(5);
     private JTextField weightCurrentValue = new JTextField(5);
-    private JTextField dobCurrentValue = new JTextField(12);
+    private JTextField dobCurrentValue = new JTextField(20);
     private JTextField beautyCurrentValue = new JTextField(6);
     private JTextField chinCurrentValue = new JTextField(6);
 
@@ -381,6 +385,8 @@ public class ClientGUI extends JFrame {
 
     public Ellipse[] drawNPCs(String npcs[]) {
 
+
+
         nestedColors.remove(colors);
         nestedBeauties.remove(beautyLevels);
         nestedSharpnesses.remove(chinSharpnessTypes);
@@ -394,7 +400,7 @@ public class ClientGUI extends JFrame {
         Ellipse ellipses[] = new Ellipse[npcs.length];
 
         for (int i = 0; i < npcs.length; i++) {
-            String fields[] = npcs[i].split(" ");
+            String fields[] = npcs[i].split("; ");
             try {
                 if(!fields[9].toLowerCase().equals("null")) {
                     ellipses[i] = new Ellipse(0, 0,
@@ -434,9 +440,15 @@ public class ClientGUI extends JFrame {
                 ellipses[i].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent mouseEvent) {
+
+                        DateTimeFormatter dtf = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG).withLocale(locale);
+                        LocalDateTime dateBefore;
+                        String dateAfter;
+                        dateAfter = LocalDateTime.parse(fields[4],DateTimeFormatter.ISO_LOCAL_DATE_TIME).format(dtf.withZone(ZoneId.systemDefault()));
+
                         xCurrentValue.setText(fields[5]);
                         yCurrentValue.setText(fields[6]);
-                        dobCurrentValue.setText(fields[4]);
+                        dobCurrentValue.setText(dateAfter);
                         weightCurrentValue.setText(fields[3]);
                         heightCurrentValue.setText(fields[2]);
                         nameCurrentValue.setText(fields[1]);
@@ -469,7 +481,7 @@ public class ClientGUI extends JFrame {
 
                 for (int i=0; i < npcs.length; i++) {
                     if (checker[i]) {
-                        String fields[] = npcs[i].split(" ");
+                        String fields[] = npcs[i].split("; ");
                         if (ellipses[i] != null) {
                             collectionPanel.repaint();
 
@@ -516,7 +528,7 @@ public class ClientGUI extends JFrame {
 
                 for (int i = 0; i < npcs.length; i++) {
                     if (checker[i]) {
-                        String fields[] = npcs[i].split(" ");
+                        String fields[] = npcs[i].split("; ");
                         if (ellipses[i] != null) {
                             collectionPanel.remove(ellipses[i]);
                             ClientGUI.this.repaint();
@@ -629,7 +641,7 @@ public class ClientGUI extends JFrame {
 
         color.add("");
         for (int i = 0; i< npcs.length; i++) {
-            String fields[] = npcs[i].split(" ");
+            String fields[] = npcs[i].split("; ");
 
             if (!(color.contains(fields[9].toLowerCase()))) color.add(fields[9].toLowerCase());
 
@@ -685,7 +697,7 @@ public class ClientGUI extends JFrame {
         boolean[] check = new boolean[npcs.length];
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         for (int i=0; i < npcs.length; i++) {
-            String fields[] = npcs[i].split(" ");
+            String fields[] = npcs[i].split("; ");
             boolean fieldChecks[] = new boolean[fields.length];
             time = true;
             try {
@@ -817,6 +829,7 @@ public class ClientGUI extends JFrame {
 
     public void changeLanguage(Locale locale) {
         ResourceBundle bundle = ResourceBundle.getBundle("Resources", locale, new BundleControl());
+        this.locale = locale;
         this.setTitle(bundle.getString("title"));
         acquireDataFromServer.setText(bundle.getString("acquireData"));
         helpButton.setText(bundle.getString("helpBtn"));
@@ -862,6 +875,9 @@ public class ClientGUI extends JFrame {
         labelStop.setText(bundle.getString("labelStop"));
 
         languageMenu.changeLanguage(locale);
+
+
+//        }
 
         nestedDateOfBirth.removeAll();
         nestedDateOfBirthFrom.removeAll();
