@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include "lab3Library.h"
 
-int x[], y[];
+extern int x[], y[];
 
-int main() {
+int main()
+{
     size_t axis_n;
     printf("Enter the number of axis: ");
     scanf("%d", &axis_n);
@@ -22,14 +23,24 @@ int main() {
 
     printf("The scalar product: %d\n\n", scalarProduct(x,y,sizeof(x)/sizeof(x[0])));
 
-    int p;
+    int p, check = 0;
     printf("Enter a number for a prime check: ");
-    if(scanf("%d", &p)) {
-        printf("Is prime: ");
-        primeCheck(p) ? printf("No\n") : printf("Yes\n");
+    while (!check)
+    {
+        if(scanf("%d", &p))
+        {
+            if (p<0)
+                printf("Input is lesser than 0. Please try again.\n");
+            else
+            {
+                check++;
+                printf("Is prime: ");
+                primeCheck(p) ? printf("No\n") : printf("Yes\n");
+            }
+        }
+        else
+            printf("Input is NaN. Please try again.\n");
     }
-    else
-        printf("Input is NaN, please try again.\n");
 
     return 0;
 }
