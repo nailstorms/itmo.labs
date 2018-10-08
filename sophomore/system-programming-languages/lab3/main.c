@@ -23,24 +23,21 @@ int main()
 
     printf("The scalar product: %d\n\n", scalarProduct(x,y,sizeof(x)/sizeof(x[0])));
 
-    int p, check = 0;
+    int p;
+
     printf("Enter a number for a prime check: ");
-    while (!check)
+    if(scanf("%d", &p))
     {
-        if(scanf("%d", &p))
-        {
-            if (p<0)
-                printf("Input is lesser than 0. Please try again.\n");
-            else
-            {
-                check++;
-                printf("Is prime: ");
-                primeCheck(p) ? printf("No\n") : printf("Yes\n");
-            }
-        }
+        if (p<0)
+            printf("Input is lesser than 0. Please try again.\n");
         else
-            printf("Input is NaN. Please try again.\n");
+        {
+            printf("Is prime: ");
+            primeCheck(p) ? printf("No\n") : printf("Yes\n");
+        }
     }
+    else
+        printf("Input is NaN. Please try again.\n");
 
     return 0;
 }
