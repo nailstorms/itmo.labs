@@ -21,20 +21,15 @@ int main()
     for (size_t i = 0; i<axis_n; i++)
         scanf("%d", &y[i]);
 
-    printf("The scalar product: %d\n\n", scalarProduct(x,y,sizeof(x)/sizeof(x[0])));
+    printf("The scalar product: %d\n\n", scalar_product(x,y,sizeof(x)/sizeof(x[0])));
 
-    int p;
+    unsigned long p;
 
-    printf("Enter a number for a prime check: ");
-    if(scanf("%d", &p))
+    printf("Enter a number for a prime check (type - unsigned long, negative numbers are converted): ");
+    if(scanf("%lu", &p))
     {
-        if (p<0)
-            printf("Input is lesser than 0. Please try again.\n");
-        else
-        {
-            printf("Is prime: ");
-            primeCheck(p) ? printf("No\n") : printf("Yes\n");
-        }
+        printf("Is prime: ");
+        is_prime(p) ? printf("No\n") : printf("Yes\n");
     }
     else
         printf("Input is NaN. Please try again.\n");
