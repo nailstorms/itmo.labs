@@ -90,7 +90,7 @@ int main()
     printf("\nElement amount: %d\n", list_length(list));
     printf("Sum of elements: %d\n", list_sum(list));
 
-    printf("\n\nElement #3:\n%d", list_get(list, 3));
+    printf("\n\nElement #3:\n%d", list_get(list, 2));
 
     puts("\n\n\n..testing output with foreach...\n\nWith spaces:");
     foreach(list, print_space);
