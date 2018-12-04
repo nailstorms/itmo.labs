@@ -12,5 +12,68 @@ import java.util.Iterator;
 
 @WebServlet("/")
 public class ControllerServlet extends HttpServlet {
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        ArrayList<Dot> checkings = new ArrayList<>();
+        getServletContext().setAttribute("chTable", checkings);
+    }
 
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String query = request.getRequestURI();
+
+        if (query != null && (query.endsWith(".css") || query.endsWith(".png") || query.endsWith(".js"))) {
+            if (query.endsWith(".css")) response.setContentType("text/css;charset=UTF-8");
+            if (query.endsWith(".png")) response.setContentType("image/png");
+            if (query.endsWith(".js")) response.setContentType("text/javascript;charset=UTF-8");
+            String filename = query.split("/")[query.split("/").length - 1];
+            InputStream res = getServletContext().getResourceAsStream("/" + filename);
+            if (res == null) {
+                response.setStatus(404);
+            } else {
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = res.read(buffer)) != -1) {
+                    response.getOutputStream().write(buffer, 0, len);
+                }
+            }
+        } else {
+            response.setContentType("text/html;charset=UTF-8");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }
+
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String query = request.getRequestURI();
+        if (query.contains("clearHistory")) {
+            if (request.getParameter("rad") != null) {
+                int rd = Integer.parseInt(request.getParameter("rad"));
+                ArrayList<Dot> getTbl = (ArrayList<Dot>) getServletContext().getAttribute("chTable");
+                Iterator<Dot> i = getTbl.iterator();
+                while (i.hasNext()) {
+                    Dot s = i.next();
+                    if (s.rad.equals(Integer.toString(rd))) {
+                        i.remove();
+                    }
+                }
+                getServletContext().setAttribute("chTable", getTbl);
+            } else {
+                getServletContext().setAttribute("chTable", new ArrayList<Dot>());
+            }
+        } else {
+
+            response.setContentType("text/html;charset=UTF-8");
+            String kx = request.getParameter("koordX");
+            request.setAttribute("X", kx);
+            String ky = request.getParameter("koordY");
+            request.setAttribute("Y", ky);
+            String rad = request.getParameter("radius");
+            request.setAttribute("RAD", rad);
+            if (kx != null && ky != null && rad != null) {
+                request.getRequestDispatcher("/areaCheck").forward(request, response);
+            } else {
+                response.sendError(400);
+            }
+        }
+    }
 }
