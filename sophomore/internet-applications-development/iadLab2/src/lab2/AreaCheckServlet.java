@@ -29,19 +29,21 @@ public class AreaCheckServlet extends HttpServlet {
         String rad;
         String name;
         int getFl;
-        String[] Yk = {"-4","-3","-2","-1","0","1","2","3","4"};
-        String[] rk = {"1","2","3","4","5"};
+        String[] xk = {"-5","-4","-3","-2","-1","0","1","2","3"};
         getFl=0;
         response.setContentType("text/html");
         name = request.getParameter("name");
         kx = request.getParameter("koordX");
-        if ((kx!=null) && kx.contains(",")) {
-            kx = kx.replace(",", ".");
-        }
         request.setAttribute("X", kx);
         ky = request.getParameter("koordY");
+        if ((ky!=null) && ky.contains(",")) {
+            ky = ky.replace(",", ".");
+        }
         request.setAttribute("Y", ky);
         rad = request.getParameter("radius");
+        if ((rad!=null) && rad.contains(",")) {
+            rad = rad.replace(",", ".");
+        }
         request.setAttribute("RAD", rad);
         try {
             res = AreaCheckServlet.checkAreaHit(Double.parseDouble(kx), Double.parseDouble(ky), Double.parseDouble(rad));
@@ -57,11 +59,12 @@ public class AreaCheckServlet extends HttpServlet {
             request.setAttribute("RESULT", res);
             getFl=1;
         }
-        boolean containsY = Arrays.stream(Yk).anyMatch(ky::equals);
-        boolean containsR = Arrays.stream(rk).anyMatch(rad::equals);
+        boolean containsX = Arrays.stream(xk).anyMatch(kx::equals);
+
         try {
-            double xx = Double.parseDouble(kx);
-            if (name.equals("TextForm") && !(containsR && containsY && ((xx <= 3) && (xx >= -5)))) {
+            double yy = Double.parseDouble(ky);
+            double rr = Double.parseDouble(rad);
+            if (name.equals("TextForm") && !(((yy >= -5) && (yy <= 3)) && ((rr >= 2) && (rr <= 5)) && containsX)) {
                 kx = "--";
                 ky = "--";
                 rad = "--";
@@ -92,5 +95,6 @@ public class AreaCheckServlet extends HttpServlet {
         request.getRequestDispatcher("checkTable.jsp").forward(request, response);
 
     }
+
 
 }
