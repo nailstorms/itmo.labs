@@ -19,7 +19,9 @@ dup 1 > if
 else 0 then ( 1 is not prime ) 
 ;
 
-: is_prime_allot is_prime 1 allot swap over c! c@ ;
+: is_prime_allot is_prime 1 allot swap over c! dup c@ ." Result - " . ." , is stored at address - " . cr ;
+
+
 
 : collatz
 space
