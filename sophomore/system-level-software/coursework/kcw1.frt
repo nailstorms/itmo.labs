@@ -19,12 +19,12 @@ dup 1 > if
 else 0 then ( 1 is not prime ) 
 ;
 
-: is_even_allot is_even 1 allot
+: is_prime_allot is_prime 1 allot swap over c! c@ ;
 
 : collatz
 space
 repeat
-    dup 2 % if 3 * 1 +
+    dup is_odd if 3 * 1 +
     else 2 / then
     space
     dup 1 > not
