@@ -13,29 +13,57 @@ int main() {
     for (int i = 0; i < n; i++) {
         pair<int, int> temp;
         cin >> temp.second;
-        temp.first = i+1;
+        temp.first = i + 1;
         count += temp.second;
         p.push_back(temp);
     }
 
     sort(p.begin(), p.end(), comp);
 
-    for (int i = 0; count; count--) {
-        if(p.empty()) break;
-        if(p.size() == 1) {
-            cout << p[i].first << " ";
-            p[i].second--;
-            if (p[i].second == 0) p.pop_front();
-        } else {
-            cout << p[i].first << " ";
-            p[i].second--;
-            cout << p[i+1].first << " ";
-            p[i+1].second--;
-            if (p[i].second == 0) p.pop_front();
-            if (p[i+1].second == 0) {
-                pair<int, int> temp = p[i];
-                p.pop_front(); p.pop_front();
-                p.push_front(temp);
+    while (count--) {
+        cout << p[0].first << " ";
+        p[0].second--;
+        if (p[1].second != 0) {
+            cout << p[1].first << " ";
+            p[1].second--;
+        }
+
+        int j = 1, k = 2;
+        while (p[j].second < p[k].second) {
+            int t = p[j].second;
+            p[j].second = p[k].second;
+            p[k].second = t;
+            t = p[j].first;
+            p[j].first = p[k].first;
+            p[k].first = t;
+            k++;
+            j++;
+            if (k == n) {
+                break;
+            }
+        }
+        j = 0, k = 1;
+        while (p[j].second < p[k].second) {
+            int t = p[j].second;
+            p[j].second = p[k].second;
+            p[k].second = t;
+            t = p[j].first;
+            p[j].first = p[k].first;
+            p[k].first = t;
+            k++;
+            j++;
+            if (k == n) {
+                break;
+            }
+        }
+
+        if (p[0].second <= 0)
+            break;
+
+        if (!p.empty()) {
+            if (p[0].second <= 0) {
+                if (p[1].second > 0) p.pop_front();
+                else break;
             }
         }
     }
