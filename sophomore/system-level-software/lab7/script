@@ -1,0 +1,42 @@
+ERR_PATH="$HOME/lab1_err"
+
+while [ "$menu" != 6 ]
+do
+    echo '1. Напечатать имя текущего каталога'
+    echo '2. Сменить текущий каталог'
+    echo '3. Выдать список пользователей, имеющих хотя бы один процесс'
+    echo '4. Создать файл'
+    echo '5. Скопировать файл'
+    echo '6. Выйти из программы'
+    echo 'Выберите пункт меню:'
+
+    read menu || break
+
+    case "$menu" in
+        1)
+            pwd 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
+        ;;
+        2)
+            echo 'Введите путь к каталогу:'
+            read path_to_dir
+            cd "$path_to_dir" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
+        ;;
+        3)
+            ps -Af | awk '!/pts|UID|console/{ print $1 }' | grep -v "?" | sort | uniq 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
+        ;;
+        4)
+            echo 'Введите имя файла:'
+            read filename
+			echo ”Введите содержимое файла, а затем нажмите Ctrl+D, чтобы создать файл.\n”
+            cat > "$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
+        ;;
+        5)
+            echo 'Введите имя файла:'
+            read filename
+echo 'Введите путь для копирования файла:'
+            read new_dir
+            cp "$filename" "$new_dir"  2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2 
+        ;;
+    esac
+
+done
