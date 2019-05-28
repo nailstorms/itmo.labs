@@ -5,10 +5,10 @@ using namespace std;
 int n, k;
 int fenwick_tree_arr[100000];
 
-int sum(int x) {
+int sum(int a) {
     int s = 0;
-    for(; x >= 0; x = (x & (x + 1)) - 1){
-        s += fenwick_tree_arr[x];
+    for(; a >= 0; a = (a & (a + 1)) - 1){
+        s += fenwick_tree_arr[a];
     }
     return s;
 }
@@ -17,9 +17,9 @@ int segment_sum(int l, int r) {
     return sum(r) - sum(l - 1);
 }
 
-void update_status(int x, int status) {
-    for(; x < n; x = (x | (x + 1))){
-        fenwick_tree_arr[x] += status;
+void update_status(int a, int status) {
+    for(; a < n; a = (a | (a + 1))){
+        fenwick_tree_arr[a] += status;
     }
 }
 
@@ -40,16 +40,12 @@ int fetch_next_deserter(int l_bound) {
 
 int main() {
     cin >> n >> k;
-    if (n == 1) {
-        cout << n;
-        return 0;
-    }
     cout << k << " ";
-    int x = k - 1;
+    int a = k - 1;
     for (int i = 1; i < n; i++) {
-        update_status(x, 1);
-        x = fetch_next_deserter(x);
-        cout << x + 1 << " ";
+        update_status(a, 1);
+        a = fetch_next_deserter(a);
+        cout << a + 1 << " ";
     }
     return 0;
 }
