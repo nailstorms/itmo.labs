@@ -21,7 +21,7 @@ int main()
     }
     cin >> s >> f;
 
-    deque< pair< int, int > > mpcq;
+    deque< pair< int, int > > mpcq; //Max Profit Check Queue
     mpcq.push_back({0, s});
     while(!mpcq.empty()){
 
