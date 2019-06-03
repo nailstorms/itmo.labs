@@ -17,6 +17,24 @@ native "dup", dup
     push qword[rsp]
 endnative
 
+native ".", show_top
+    pop rdi
+    call print_int
+endnative
+
+native ".S", show_stack
+    mov rcx, rsp
+    .loop:
+        cmp rcx, [stack_start] 
+        jae next
+        mov rdi, [rcx]
+        push rcx
+        call print_int
+        call print_newline
+        pop rcx
+        add rcx, 8
+        jmp .loop
+
 
 
 ; ----- Arithmetic operators -----
@@ -122,3 +140,90 @@ endnative
 native "r@", rs_fetch
     push qword [rstack]
 endnative
+
+
+
+
+; ----- Memory management operators -----
+
+native "@", fetch
+    pop rax
+    push qword[rax]
+    jmp next
+
+native "!", write
+    pop rax
+    pop rdx
+    mov [rax], rdx
+endnative
+
+native "c!", write_char
+    pop rax
+    pop rdx
+    mov [rax], dl
+endnative
+
+native "c@", fetch_char
+    pop rax
+    movzx rax, byte [rax]
+    push rax
+endnative
+
+native "execute", execute
+    pop rax
+    mov w, rax
+    jmp [rax]
+    
+
+
+; ----- Execution management operators -----
+
+native "docol", docol
+    rspush pc
+    add w, 8
+    mov pc, w
+endnative
+
+native "branch", branch
+    mov pc, [pc]
+endnative
+
+native "0branch", branch0
+    pop rax
+    test rax, rax
+    jnz .skip
+    mov pc, [pc]
+    jmp next
+    
+  .skip:
+    add pc, 8
+endnative
+
+native "exit", exit
+    rspop pc
+endnative
+
+
+
+; ----- Service operators -----
+
+native "lit", lit
+    push qword [pc]
+    add pc, 8
+endnative
+
+native "syscall", syscall
+    pop r9
+    pop r8
+    pop r10
+    pop rdx
+    pop rsi
+    pop rdi
+    pop rax
+    syscall
+    push rax
+    push rdx
+endnative
+
+native "bye", bye
+    call system_exit
