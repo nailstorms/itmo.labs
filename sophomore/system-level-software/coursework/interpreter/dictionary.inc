@@ -18,6 +18,7 @@ native "dup", dup
 endnative
 
 
+
 ; ----- Arithmetic operators -----
 
 native "+", plus
@@ -81,4 +82,43 @@ native ">", greater
 endnative
 
 
+
 ; ----- Logical operators -----
+
+native "not", not
+    pop rax
+    test rax, rax
+    setz al
+    movzx rax, al
+    push rax
+endnative
+
+native "and", and
+    pop rax
+    and [rsp], rax
+endnative
+
+native "or", or
+    pop rax
+    or [rsp], rax
+endnative
+
+; todo land & lor (wth is this even)
+
+
+
+; ----- Return stack operators -----
+
+native ">r", to_rs
+    pop rax
+    rspush rax
+endnative
+
+native "r>", from_rs
+    rspop rax
+    push rax
+endnative
+
+native "r@", rs_fetch
+    push qword [rstack]
+endnative
