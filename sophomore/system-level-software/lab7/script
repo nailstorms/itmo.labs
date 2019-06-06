@@ -19,7 +19,7 @@ do
             pwd 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
         ;;
         2)
-	    read -p 'Path to directory: ' path_to_dir
+            read -p 'Path to directory: ' path_to_dir
             cd "$path_to_dir" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
         ;;
         3)
@@ -27,34 +27,33 @@ do
         ;;
         4)
             read -r -p 'Enter file name: ' filename
-		if [[ $filename == "" ]]
-		then
-			filename=$'\n'
-		fi
-		echo "create $filename (y/n)?"
-           		read confirm
-            		if [ $confirm = "y" ]
-            		then
-            			touch "$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
+            if [[ $filename == "" ]]
+            then
+                filename=$'\n'
+            fi
+            echo "create $filename (y/n)?"
+           	read confirm
+            if [ $confirm = "y" ]
+            then
+            	touch "$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
 			fi
         ;;
         5)
-            	read -p 'Enter file name: ' filename
-            	read -p 'Path to copy to: ' new_dir
-		echo "cp: copy $filename to $new_dir (y/n)?"
-           		read confirm
-            		if [ $confirm = "y" ]
-            		then
+            read -p 'Enter file name: ' filename
+            read -p 'Path to copy to: ' new_dir
+            echo "cp: copy $filename to $new_dir (y/n)?"
+           	read confirm
+            if [ $confirm = "y" ]
+            then
 
-		if [[ $filename =~ ^/.* ]]
-		then
-				cp "$filename" "$new_dir"  2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
-			else
-				cp "./$filename" "$new_dir"  2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
-			fi
-		fi
-
-        	;;
+                if [[ $filename =~ ^/.* ]]
+                then
+                    cp "$filename" "$new_dir"  2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
+                else
+                    cp "./$filename" "$new_dir"  2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
+                fi
+            fi
+        ;;
 		6)
 			read -p 'Enter filename or path: ' filename
 			if [[ $filename == "" ]]
@@ -62,15 +61,15 @@ do
 				filename=$'\n'
 			fi
 			echo "rm: remove $filename (y/n)?"
-           		read confirm
-            		if [ $confirm = "y" ]
-            		then
-				if [[ $filename =~ ^/.* ]]
-				then
-					rm "$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
-				else
-					rm "./$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
-				fi
+           	read confirm
+            if [ $confirm = "y" ]
+            then
+                if [[ $filename =~ ^/.* ]]
+                then
+                    rm "$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
+                else
+                    rm "./$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
+                fi
 			fi
 		;;
 		7)
