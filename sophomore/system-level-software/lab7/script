@@ -7,8 +7,8 @@ do
     echo '3. Print all users with at least one process'
     echo '4. Create file'
     echo '5. Copy file'
-	echo '6. Delete file'
-	echo '7. Change file/directory permissions'
+    echo '6. Delete file'
+    echo '7. Change file/directory permissions'
     echo '8. Exit'
     echo 'Choose option:'
 
@@ -32,17 +32,17 @@ do
                 filename=$'\n'
             fi
             echo "create $filename (y/n)?"
-           	read confirm
+            read confirm
             if [ $confirm = "y" ]
             then
-            	touch "$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
-			fi
+                touch "$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
+            fi
         ;;
         5)
             read -p 'Enter file name: ' filename
             read -p 'Path to copy to: ' new_dir
             echo "cp: copy $filename to $new_dir (y/n)?"
-           	read confirm
+            read confirm
             if [ $confirm = "y" ]
             then
 
@@ -54,14 +54,14 @@ do
                 fi
             fi
         ;;
-		6)
-			read -p 'Enter filename or path: ' filename
-			if [[ $filename == "" ]]
-			then
-				filename=$'\n'
-			fi
-			echo "rm: remove $filename (y/n)?"
-           	read confirm
+        6)
+            read -p 'Enter filename or path: ' filename
+            if [[ $filename == "" ]]
+            then
+                filename=$'\n'
+            fi
+            echo "rm: remove $filename (y/n)?"
+            read confirm
             if [ $confirm = "y" ]
             then
                 if [[ $filename =~ ^/.* ]]
@@ -70,22 +70,22 @@ do
                 else
                     rm "./$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
                 fi
-			fi
-		;;
-		7)
-			read -p 'Enter file/directory name or path: ' filename
-			if [[ $filename == "" ]]
-			then
-				filename=$'\n'
-			fi
-			read -p 'Enter permissions: ' permissions
-			if [[ $filename =~ ^/.* ]]
-			then
-				chmod "$permissions" "$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
-			else
-				chmod "$permissions" "./$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
-			fi
-		;;
+            fi
+        ;;
+        7)
+            read -p 'Enter file/directory name or path: ' filename
+            if [[ $filename == "" ]]
+            then
+                filename=$'\n'
+            fi
+            read -p 'Enter permissions: ' permissions
+            if [[ $filename =~ ^/.* ]]
+            then
+                chmod "$permissions" "$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
+            else
+                chmod "$permissions" "./$filename" 2>>"$ERR_PATH" || echo 'An error has occurred. Check log file.' 1>&2
+            fi
+        ;;
     esac
 
 done
