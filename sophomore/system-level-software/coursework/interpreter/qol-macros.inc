@@ -21,8 +21,7 @@
     jmp next                        ; return to interpreter
 %endmacro
 
-
-
+; --------------------------------------------------------------
 
 %macro colon 3
     section .data 
@@ -47,16 +46,14 @@
     dq xt_exit
 %endmacro
 
-
-
+; --------------------------------------------------------------
 
 %macro const 2
     colon %1, %2
     dq xt_lit,  %2, xt_exit
 %endmacro
 
-
-
+; --------------------------------------------------------------
 
 %macro branch 1
   dq xt_branch
@@ -68,8 +65,7 @@
   dq %1
 %endmacro
 
-
-
+; --------------------------------------------------------------
 
 %macro rspush 1
     sub rstack, 8
