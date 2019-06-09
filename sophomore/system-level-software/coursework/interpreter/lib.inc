@@ -1,5 +1,3 @@
-global _start
-
 section .text
 
 ; string_length - возвращает длину нуль-терминированной строки

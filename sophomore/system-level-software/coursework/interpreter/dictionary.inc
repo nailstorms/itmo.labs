@@ -82,19 +82,10 @@ native "=", equals
 endnative
 
 native "<", lesser
-    pop rax
     pop rdx
+    pop rax
     cmp rax, rdx
     setl al
-    movzx rax, al
-    push rax
-endnative
-
-native ">", greater
-    pop rax
-    pop rdx
-    cmp rax, rdx
-    setg al
     movzx rax, al
     push rax
 endnative
@@ -121,7 +112,29 @@ native "or", or
     or [rsp], rax
 endnative
 
-; todo land & lor (wth is this even)
+native "land", land
+    pop rax
+    pop rdx
+    test rax, rax
+    jz .no
+    push rdx
+    jmp next
+    
+   .no:
+    push rax
+endnative
+
+native "lor", lor
+    pop rax
+    pop rdx
+    test rax, rax
+    jnz .yes
+    push rdx
+    jmp next
+    
+   .yes:
+    push rax
+endnative
 
 
 
@@ -188,7 +201,7 @@ native "branch", branch
     mov pc, [pc]
 endnative
 
-native "0branch", branch0
+native "branch0", branch0
     pop rax
     test rax, rax
     jnz .skip
