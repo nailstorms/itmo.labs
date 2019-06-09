@@ -17,6 +17,19 @@ native "dup", dup
     push qword[rsp]
 endnative
 
+native "rot", rot
+    pop rax
+    pop rdx
+    pop rcx
+    push rdx
+    push rcx
+    push rax
+endnative
+
+native 'buf', buf
+    push qword user_buf
+endnative
+
 native ".", show_top
     pop rdi
     call print_int

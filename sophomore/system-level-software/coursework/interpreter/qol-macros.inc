@@ -58,6 +58,19 @@
 
 
 
+%macro branch 1
+  dq xt_branch
+  dq %1
+%endmacro
+
+%macro branch0 1
+  dq xt_branch0
+  dq %1
+%endmacro
+
+
+
+
 %macro rspush 1
     sub rstack, 8
     mov qword [rstack], %1
