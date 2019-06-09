@@ -43,15 +43,27 @@
     colon %1, %2, 0
 %endmacro
 
+%macro endcolon 0
+    dq xt_exit
+%endmacro
 
 
 
-%macro rs_push 1
+
+%macro const 2
+    colon %1, %2
+    dq xt_lit,  %2, xt_exit
+%endmacro
+
+
+
+
+%macro rspush 1
     sub rstack, 8
     mov qword [rstack], %1
 %endmacro
 
-%macro rs_pop 1
+%macro rspop 1
     mov %1, qword [rstack]
     add rstack, 8
 %endmacro
