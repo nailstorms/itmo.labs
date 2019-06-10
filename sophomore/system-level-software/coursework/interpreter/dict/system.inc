@@ -42,4 +42,6 @@ native "syscall", syscall
 endnative
 
 native "bye", bye
-    call system_exit
+    mov rax, 60
+    xor rdi, rdi
+    syscall

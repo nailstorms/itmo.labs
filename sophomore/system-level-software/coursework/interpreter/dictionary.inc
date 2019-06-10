@@ -1,7 +1,7 @@
 %include 'qol-macros.inc'
 %include 'lib.inc'
 %include 'dict/arithmetics.inc'
-%include 'dict/colon.inc'
+%include 'dict/definition.inc'
 %include 'dict/data.inc'
 %include 'dict/logical.inc'
 %include 'dict/retstack.inc'

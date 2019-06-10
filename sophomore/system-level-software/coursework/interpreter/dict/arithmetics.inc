@@ -10,6 +10,11 @@ native "*", mul
     push rax
 endnative
 
+colon "double", double
+    dq xt_dup
+    dq xt_plus
+endcolon
+
 native "/", div
     pop rcx
     pop rax
@@ -48,3 +53,9 @@ native "<", lesser
     movzx rax, al
     push rax
 endnative
+
+
+colon ">", greater
+    dq xt_swap
+    dq xt_lesser
+endcolon
