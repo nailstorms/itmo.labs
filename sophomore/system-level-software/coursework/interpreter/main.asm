@@ -1,16 +1,10 @@
+global _start
+
+%include 'dictionary.inc'
+
 %define pc     r15 
 %define w      r14
 %define rstack r13
-
-; ---------------------------------------------------------------
-
-section .data
-
-err_msg: db "Not found: ", 0
-
-last_word: dq __prev_word_
-here: dq dictionary
-pointer: dq mem   
 
 ; ---------------------------------------------------------------
 
@@ -19,11 +13,25 @@ section .bss
 resq 1023
 rstack_start: resq 1
 
-dictionary: resq 65536                  
-mem: resq 65536                  
-state: resq 1 
-word_buf: resb 1024 
+input_buf: resb 1024
+user_dict:  resq 65536
 
+user_mem: resq 65536
+
+state: resq 1
+
+; ---------------------------------------------------------------
+
+section .data 
+last_word: dq __prev_word_
+here: dq user_dict
+dp: dq user_mem
+
+; ---------------------------------------------------------------
+
+section .rodata
+no_such_word: db "No such word", 10, 0
+ 
 ; ---------------------------------------------------------------
 
 section .text

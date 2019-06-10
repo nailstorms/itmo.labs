@@ -3,6 +3,7 @@
 %include 'dict/arithmetics.inc'
 %include 'dict/definition.inc'
 %include 'dict/data.inc'
+%include 'dict/interp.inc'
 %include 'dict/logical.inc'
 %include 'dict/retstack.inc'
 %include 'dict/stack.inc'
