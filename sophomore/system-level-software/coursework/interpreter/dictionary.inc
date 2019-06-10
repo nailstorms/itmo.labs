@@ -6,4 +6,5 @@
 %include 'dict/logical.inc'
 %include 'dict/retstack.inc'
 %include 'dict/stack.inc'
+%include 'dict/string.inc'
 %include 'dict/system.inc'

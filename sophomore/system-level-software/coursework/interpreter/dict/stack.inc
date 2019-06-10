@@ -22,10 +22,6 @@ native "rot", rot
     push rax
 endnative
 
-native 'buf', buf
-    push qword user_buf
-endnative
-
 native ".", show_top
     pop rdi
     call print_int
@@ -43,4 +39,6 @@ native ".S", show_stack
         pop rcx
         add rcx, 8
         jmp .loop
-       
+
+section .data
+    stack_start: dq 0
