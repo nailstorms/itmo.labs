@@ -39,6 +39,3 @@ native ".S", show_stack
         pop rcx
         add rcx, 8
         jmp .loop
-
-section .data
-    stack_start: dq 0
