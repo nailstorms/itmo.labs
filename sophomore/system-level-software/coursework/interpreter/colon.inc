@@ -2,7 +2,7 @@ section .rodata
 no_such_word: db "No such word: ", 0
 
 section .bss
-word_buf:  resq 512
+word_buf:  resq 1024
 user_dict:  resq 65536
 section .data
 here:  dq user_dict
@@ -12,7 +12,7 @@ fd: dq 0
 %define INTERPRETING 0
 state: dq INTERPRETING
 
-const "here", here
+const "buffer", word_buf
 const "last-word", last_word
 const "is-compiling", state
 const "input-fd", fd

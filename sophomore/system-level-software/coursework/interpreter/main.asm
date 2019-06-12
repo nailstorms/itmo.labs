@@ -1,17 +1,14 @@
-<<<<<<< HEAD
 global _start
 %include "qol-macros.inc"
 %include "lib.inc"
 
-=======
->>>>>>> parent of 9034aab... sls cw: testing, add makefile
+
 %define pc     r15 
 %define w      r14
 %define rstack r13
 
 ; ---------------------------------------------------------------
 
-<<<<<<< HEAD
 section .text
 
 %include "dictionary.inc"
@@ -32,28 +29,6 @@ last_word: dq __prev_word_
 stack_start: dq 0
 dp: dq user_mem
  
-=======
-section .data
-
-err_msg: db "Not found: ", 0
-
-last_word: dq __prev_word_
-here: dq dictionary
-pointer: dq mem   
-
-; ---------------------------------------------------------------
-
-section .bss
-
-resq 1023
-rstack_start: resq 1
-
-dictionary: resq 65536                  
-mem: resq 65536                  
-state: resq 1 
-word_buf: resb 1024 
-
->>>>>>> parent of 9034aab... sls cw: testing, add makefile
 ; ---------------------------------------------------------------
 
 
