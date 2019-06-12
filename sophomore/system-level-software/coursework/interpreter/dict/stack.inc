@@ -39,3 +39,9 @@ native ".S", show_stack
         pop rcx
         add rcx, 8
         jmp .loop
+        
+native "sp", sp
+    push rsp
+endnative
+
+const "forth-dp", dp

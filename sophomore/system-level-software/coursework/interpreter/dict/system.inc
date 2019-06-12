@@ -40,8 +40,3 @@ native "syscall", syscall
     push rax
     push rdx
 endnative
-
-native "bye", bye
-    mov rax, 60
-    xor rdi, rdi
-    syscall

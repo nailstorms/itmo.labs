@@ -25,18 +25,3 @@ native "execute", execute
     pop rax
     mov w, rax
     jmp [rax]
-    
-native "cfa", cfa
-    pop rsi
-    add rsi, 9
-    .loop:
-    mov al, [rsi]
-    test al, al
-    jz .end
-    inc rsi
-    jmp .loop
-
-    .end:
-    add rsi, 2
-    push rsi
-endnative
