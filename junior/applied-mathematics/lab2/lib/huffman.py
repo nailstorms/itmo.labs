@@ -1,25 +1,23 @@
 class HuffmanWrapper:
 
     @staticmethod
-    def huffman(p):
-        # assert(sum(p.values()) == 1.0)
+    def huffmanize(prob_dict):
 
-        if(len(p) == 2):
-            return dict(zip(p.keys(), ['0', '1']))
+        if(len(prob_dict) == 2):
+            return dict(zip(prob_dict.keys(), ['0', '1']))
 
-        p_prime = p.copy()
-        a1, a2 = HuffmanWrapper.lowest_prob_pair(p)
-        p1, p2 = p_prime.pop(a1), p_prime.pop(a2)
-        p_prime[a1 + a2] = p1 + p2
+        prob_dict_temp = prob_dict.copy()
+        letter_1, letter_2 = HuffmanWrapper.lowest_prob_pair(prob_dict)
+        prob_1, prob_2 = prob_dict_temp.pop(letter_1), prob_dict_temp.pop(letter_2)
+        prob_dict_temp[letter_1 + letter_2] = prob_1 + prob_2
 
-        c = HuffmanWrapper.huffman(p_prime)
-        ca1a2 = c.pop(a1 + a2)
-        c[a1], c[a2] = ca1a2 + '0', ca1a2 + '1'
+        huffman_code_dict = HuffmanWrapper.huffmanize(prob_dict_temp)
+        huffman_node = huffman_code_dict.pop(letter_1 + letter_2)
+        huffman_code_dict[letter_1], huffman_code_dict[letter_2] = huffman_node + '0', huffman_node + '1'
 
-        return c
+        return huffman_code_dict
 
     @staticmethod
-    def lowest_prob_pair(p):
-        # assert(len(p) >= 2)
-        sorted_p = sorted(p.items(), key=lambda x: x[1])
-        return sorted_p[0][0], sorted_p[1][0]
+    def lowest_prob_pair(prob_dict):
+        sorted_prob_dict = sorted(prob_dict.items(), key=lambda x: x[1])
+        return sorted_prob_dict[0][0], sorted_prob_dict[1][0]
