@@ -4,6 +4,7 @@ from lib import ShannonFanoNode
 from tabulate import tabulate
 import os
 import collections
+import math
 
 def main():
     text_length = 0
@@ -48,10 +49,13 @@ def main():
         print(f'\nТаблица для кодов Хаффмана:\n\n{table}')
 
         avg_huffman_length = 0.0
+        huffman_ent = 0.0
         for prob_key in huffman_res:
             avg_huffman_length += len(huffman_res[prob_key])
+            huffman_ent -= (sorted_probs[prob_key] * math.log2(sorted_probs[prob_key]))
         avg_huffman_length /= len(huffman_res)
         print(f'\nСредняя длина кодов Хаффмана: {avg_huffman_length}')
+        print(f'Энтропия кодов Хаффмана: {huffman_ent}')
 
 
         ''' Шэннон-Фано '''
@@ -65,10 +69,13 @@ def main():
         print(f'\n\nТаблица для кодов Шэннона-Фано:\n\n{table}')
         
         avg_shannon_fano_length = 0.0
+        shannon_fano_ent = 0.0
         for item in nodes:
             avg_shannon_fano_length += len(item.code)
+            shannon_fano_ent -= (item.prob * math.log2(item.prob))
         avg_shannon_fano_length /= len(nodes)
         print(f'\nСредняя длина кодов Шэннона-Фано: {avg_shannon_fano_length}')
+        print(f'Энтропия кодов Шэннона-Фано: {shannon_fano_ent}')
 
 
 if __name__ == "__main__":
