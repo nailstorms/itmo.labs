@@ -1,6 +1,6 @@
 #include "server.h"
 
-int socket_fd;
+static int socket_fd;
 
 void handle_signals(int signo)
 {
