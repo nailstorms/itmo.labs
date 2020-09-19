@@ -11,6 +11,7 @@ public class TestArctan {
     @BeforeClass
     public void setupData(ITestContext context) {
         context.setAttribute("eps", 10000000);
+        context.setAttribute("roundPlaces", 6);
     }
 
     @DataProvider(name = "SmokeTestData")
@@ -64,6 +65,8 @@ public class TestArctan {
     private void testArctanBase(Double x, ITestContext context) {
         Double actualValue = Arctan.computeTaylorSeries(x, (Integer) context.getAttribute("eps"));
         Double expectedValue = Math.atan(x);
-        Assert.assertEquals(DoubleUtil.round(actualValue, 6), DoubleUtil.round(expectedValue, 6), "Ошибка при вычислении.");
+        Assert.assertEquals(DoubleUtil.round(actualValue, (Integer) context.getAttribute("roundPlaces")),
+                DoubleUtil.round(expectedValue, (Integer) context.getAttribute("roundPlaces")),
+                "Ошибка при вычислении.");
     }
 }
