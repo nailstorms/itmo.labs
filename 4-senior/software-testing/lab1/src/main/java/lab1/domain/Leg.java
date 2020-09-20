@@ -23,10 +23,6 @@ public class Leg {
         return position;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
     public LegStatus getStatus() {
         return status;
     }

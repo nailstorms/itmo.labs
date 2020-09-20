@@ -22,8 +22,8 @@ public class TestArctan {
                 };
     }
 
-    @DataProvider(name = "MATTestData")
-    public Object[][] matTestData() {
+    @DataProvider(name = "PositiveTestData")
+    public Object[][] positiveTestData() {
         return new Object[][]
                 {
                         {"Метод корректно вычисляет значение при положительном x на отрезке с ростом, близким к линейному", 0.2},
@@ -37,8 +37,8 @@ public class TestArctan {
                 };
     }
 
-    @DataProvider(name = "ATTestData")
-    public Object[][] atTestData() {
+    @DataProvider(name = "NegativeTestData")
+    public Object[][] negativeTestData() {
         return new Object[][]
                 {
                         {"Метод не принимает (minXValue - 0.01)", -1.01},
@@ -51,13 +51,13 @@ public class TestArctan {
         testArctanBase(x, context);
     }
 
-    @Test(dataProvider = "MATTestData")
-    public void testArctan2Mat(String testcaseName, Double x, ITestContext context) {
+    @Test(dataProvider = "PositiveTestData")
+    public void testArctan2Positive(String testcaseName, Double x, ITestContext context) {
         testArctanBase(x, context);
     }
 
-    @Test(dataProvider = "ATTestData")
-    public void testArctan3At(String testcaseName, Double x, ITestContext context) {
+    @Test(dataProvider = "NegativeTestData")
+    public void testArctan3Negative(String testcaseName, Double x, ITestContext context) {
         Double actualValue = Arctan.computeTaylorSeries(x, (Integer) context.getAttribute("eps"));
         Assert.assertNull(actualValue, "Ошибка при вычислении.");
     }

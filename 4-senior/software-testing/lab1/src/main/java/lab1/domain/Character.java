@@ -31,41 +31,9 @@ public class Character {
         this.legs.add(new Leg(Position.RIGHT));
     }
 
-    public Character(String name, CharacterMood mood) {
+    public Character(String name, String location, CharacterMood mood, CharacterPosition position, int headCount) {
         this.name = name;
-        this.location = "В неизвестности";
-        this.mood = mood;
-        this.position = CharacterPosition.STANDING;
-
-        this.heads = new ArrayList<>();
-        this.heads.add(new Head());
-        this.hands = new ArrayList<>();
-        this.hands.add(new Hand(Position.LEFT));
-        this.hands.add(new Hand(Position.RIGHT));
-        this.legs = new ArrayList<>();
-        this.legs.add(new Leg(Position.LEFT));
-        this.legs.add(new Leg(Position.RIGHT));
-    }
-
-    public Character(String name, CharacterMood mood, CharacterPosition position) {
-        this.name = name;
-        this.location = "В неизвестности";
-        this.mood = mood;
-        this.position = position;
-
-        this.heads = new ArrayList<>();
-        this.heads.add(new Head());
-        this.hands = new ArrayList<>();
-        this.hands.add(new Hand(Position.LEFT));
-        this.hands.add(new Hand(Position.RIGHT));
-        this.legs = new ArrayList<>();
-        this.legs.add(new Leg(Position.LEFT));
-        this.legs.add(new Leg(Position.RIGHT));
-    }
-
-    public Character(String name, CharacterMood mood, CharacterPosition position, int headCount) {
-        this.name = name;
-        this.location = "В неизвестности";
+        this.location = location;
         this.mood = mood;
         this.position = position;
 
@@ -119,8 +87,12 @@ public class Character {
         for (Hand hand : hands) {
             if (hand.getPosition().equals(handPosition) && !hand.getStatus().equals(HandStatus.BUSY)) {
                 hand.setStatus(HandStatus.BUSY);
-                this.getHeadByPosition(headPosition).getJaw().setStatus(JawStatus.TEETH_PICKED);
-                return true;
+                if (this.getHeadByPosition(headPosition) != null) {
+                    this.getHeadByPosition(headPosition).setMood(HeadMood.PUZZLED);
+                    this.getHeadByPosition(headPosition).getJaw().setStatus(JawStatus.TEETH_PICKED);
+                    return true;
+                } else
+                    return false;
             }
         }
         return false;
@@ -135,7 +107,8 @@ public class Character {
         } else {
             for (Leg leg : legs) {
                 if (leg.getPosition().equals(legPosition)) {
-                    leg.setStatus(LegStatus.PLACED);
+                    if (!leg.getStatus().equals(LegStatus.PLACED))
+                        leg.setStatus(LegStatus.PLACED);
                     return true;
                 }
             }
@@ -158,6 +131,14 @@ public class Character {
         return name;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public CharacterMood getMood() {
         return mood;
     }
@@ -174,15 +155,4 @@ public class Character {
         this.position = position;
     }
 
-    public ArrayList<Head> getHeads() {
-        return heads;
-    }
-
-    public ArrayList<Hand> getHands() {
-        return hands;
-    }
-
-    public ArrayList<Leg> getLegs() {
-        return legs;
-    }
 }

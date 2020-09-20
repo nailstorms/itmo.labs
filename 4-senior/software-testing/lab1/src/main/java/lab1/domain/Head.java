@@ -27,10 +27,6 @@ class Head {
         return position;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
     public HeadMood getMood() {
         return mood;
     }
@@ -41,9 +37,5 @@ class Head {
 
     public Jaw getJaw() {
         return jaw;
-    }
-
-    public void setJaw(Jaw jaw) {
-        this.jaw = jaw;
     }
 }

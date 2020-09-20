@@ -23,10 +23,6 @@ class Hand {
         return position;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
     public HandStatus getStatus() {
         return status;
     }
