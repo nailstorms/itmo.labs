@@ -82,6 +82,8 @@ public class Character {
     }
 
     public Head getHeadByPosition(Position position) {
+        if (position.equals(Position.ALL))
+            throw new MultipleEntitiesFetchException();
         for (Head head : heads) {
             if (head.getPosition().equals(position))
                 return head;
@@ -90,6 +92,8 @@ public class Character {
     }
 
     public Hand getHandByPosition(Position position) {
+        if (position.equals(Position.ALL))
+            throw new MultipleEntitiesFetchException();
         for (Hand hand : hands) {
             if (hand.getPosition().equals(position))
                 return hand;
@@ -98,6 +102,8 @@ public class Character {
     }
 
     public Leg getLegByPosition(Position position) {
+        if (position.equals(Position.ALL))
+            throw new MultipleEntitiesFetchException();
         for (Leg leg : legs) {
             if (leg.getPosition().equals(position))
                 return leg;
@@ -166,5 +172,17 @@ public class Character {
 
     public void setPosition(CharacterPosition position) {
         this.position = position;
+    }
+
+    public ArrayList<Head> getHeads() {
+        return heads;
+    }
+
+    public ArrayList<Hand> getHands() {
+        return hands;
+    }
+
+    public ArrayList<Leg> getLegs() {
+        return legs;
     }
 }
