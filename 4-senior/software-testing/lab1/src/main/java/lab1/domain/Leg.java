@@ -4,19 +4,9 @@ public class Leg {
     private Position position;
     private LegStatus status;
 
-    public Leg() {
-        this.position = Position.LEFT;
-        this.status = LegStatus.FREE;
-    }
-
     public Leg(Position position) {
         this.position = position;
         this.status = LegStatus.FREE;
-    }
-
-    public Leg(Position position, LegStatus status) {
-        this.position = position;
-        this.status = status;
     }
 
     public Position getPosition() {

@@ -1,9 +1,22 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 
 <suite name="Lab1Suite" >
-    <test name="TestArctan" >
+    <test name="TestMath">
         <classes>
             <class name="lab1.math.TestArctan"/>
+        </classes>
+    </test>
+
+    <test name="TestCollection">
+        <classes>
+            <class name="lab1.collection.TestHashTable"/>
+            <class name="lab1.collection.TestHashNode"/>
+        </classes>
+    </test>
+
+    <test name="TestDomain">
+        <classes>
+            <class name="lab1.domain.TestDomain"/>
         </classes>
     </test>
 

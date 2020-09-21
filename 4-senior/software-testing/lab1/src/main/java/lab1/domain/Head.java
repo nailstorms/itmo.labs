@@ -17,12 +17,6 @@ class Head {
         this.jaw = new Jaw();
     }
 
-    public Head(HeadMood mood) {
-        this.position = Position.MIDDLE;
-        this.mood = mood;
-        this.jaw = new Jaw();
-    }
-
     public Position getPosition() {
         return position;
     }

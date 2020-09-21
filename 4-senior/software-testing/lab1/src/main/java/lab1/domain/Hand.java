@@ -4,19 +4,9 @@ class Hand {
     private Position position;
     private HandStatus status;
 
-    public Hand() {
-        this.position = Position.LEFT;
-        this.status = HandStatus.FREE;
-    }
-
     public Hand(Position position) {
         this.position = position;
         this.status = HandStatus.FREE;
-    }
-
-    public Hand(Position position, HandStatus status) {
-        this.position = position;
-        this.status = status;
     }
 
     public Position getPosition() {

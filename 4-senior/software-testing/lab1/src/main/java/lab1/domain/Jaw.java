@@ -7,10 +7,6 @@ class Jaw {
         this.status = JawStatus.IN_PLACE;
     }
 
-    public Jaw(JawStatus status) {
-        this.status = status;
-    }
-
     public JawStatus getStatus() {
         return status;
     }
