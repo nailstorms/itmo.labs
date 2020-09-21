@@ -20,6 +20,19 @@ public class TestHashTable {
     }
 
     @Test
+    public void testHashTableInsertSameHash(ITestContext context) {
+        HashTable hashTable = new HashTable((int) context.getAttribute("bucketSize"));
+        HashNode node1 = new HashNode("Test1_key", "Test1_val");
+        HashNode node2 = new HashNode("Test1_key", "Test1_val1");
+        hashTable.hashInsert(node1);
+        hashTable.hashInsert(node2);
+
+        Assert.assertEquals(hashTable.hashGetNodeBucketId(node1),
+                hashTable.hashGetNodeBucketId(node2), 
+                "Элементы с одинаковым хеш-кодом не находятся в одном списке.");
+    }
+
+    @Test
     public void testHashTableSearch(ITestContext context) {
         HashTable hashTable = new HashTable((int) context.getAttribute("bucketSize"));
         HashNode node = new HashNode("Test2_key", "Test2_val");
