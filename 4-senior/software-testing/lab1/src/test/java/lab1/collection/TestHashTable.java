@@ -28,7 +28,7 @@ public class TestHashTable {
         hashTable.hashInsert(node2);
 
         Assert.assertEquals(hashTable.hashGetNodeBucketId(node1),
-                hashTable.hashGetNodeBucketId(node2), 
+                hashTable.hashGetNodeBucketId(node2),
                 "Элементы с одинаковым хеш-кодом не находятся в одном списке.");
     }
 
