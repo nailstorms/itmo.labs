@@ -1,6 +1,8 @@
-package lab2;
+package lab2.impl;
 
-public class Trigonometry implements IBaseTrigonometry {
+import lab2.IBaseTrig;
+
+public class BaseTrig implements IBaseTrig {
     public double sin(Double x, Double eps) {
         if (x.isInfinite() || x.isNaN() || eps.isInfinite() || eps.isNaN())
             return Double.NaN;

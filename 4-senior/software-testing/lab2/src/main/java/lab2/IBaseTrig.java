@@ -1,5 +1,5 @@
 package lab2;
 
-public interface IBaseTrigonometry {
+public interface IBaseTrig {
     double sin(Double x, Double eps);
 }

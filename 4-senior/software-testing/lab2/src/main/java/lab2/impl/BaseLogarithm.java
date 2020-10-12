@@ -1,6 +1,8 @@
-package lab2;
+package lab2.impl;
 
-public class Logarithm implements IBaseLogarithm {
+import lab2.IBaseLogarithm;
+
+public class BaseLogarithm implements IBaseLogarithm {
     public double ln(Double x, Double eps) {
         if (x <= 0 || x.isNaN() || eps.isInfinite() || eps.isNaN())
             return Double.NaN;
