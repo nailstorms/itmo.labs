@@ -10,7 +10,11 @@ public class Logarithm implements ILogarithm {
         this.baseLogarithm = baseLogarithm;
     }
 
-    public double log(Double x, Double base, Double eps) {
+    public Double ln(Double x, Double eps) {
+        return baseLogarithm.ln(x, eps);
+    }
+
+    public Double log(Double x, Double base, Double eps) {
         return x.isNaN() || x.isInfinite()
                 || eps.isNaN() || eps.isInfinite()
                 || base.isNaN() || base.isInfinite() || x <= eps

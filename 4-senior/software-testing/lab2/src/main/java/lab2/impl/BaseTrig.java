@@ -3,7 +3,7 @@ package lab2.impl;
 import lab2.IBaseTrig;
 
 public class BaseTrig implements IBaseTrig {
-    public double sin(Double x, Double eps) {
+    public Double sin(Double x, Double eps) {
         if (x.isInfinite() || x.isNaN() || eps.isInfinite() || eps.isNaN())
             return Double.NaN;
 

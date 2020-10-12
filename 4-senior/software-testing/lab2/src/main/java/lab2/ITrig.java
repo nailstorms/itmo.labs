@@ -1,8 +1,11 @@
 package lab2;
 
 public interface ITrig {
-    double sin(Double x, Double eps);
-    double cos(Double x, Double eps);
-    double tan(Double x, Double eps);
-    double sec(Double x, Double eps);
+    Double sin(Double x, Double eps);
+
+    Double cos(Double x, Double eps);
+
+    Double tan(Double x, Double eps);
+
+    Double sec(Double x, Double eps);
 }

@@ -3,7 +3,7 @@ package lab2.impl;
 import lab2.IBaseLogarithm;
 
 public class BaseLogarithm implements IBaseLogarithm {
-    public double ln(Double x, Double eps) {
+    public Double ln(Double x, Double eps) {
         if (x <= 0 || x.isNaN() || eps.isInfinite() || eps.isNaN())
             return Double.NaN;
         if (x == Double.POSITIVE_INFINITY)
