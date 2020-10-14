@@ -1,5 +1,5 @@
 package lab2;
 
 public interface IBaseLogarithm {
-    Double ln(Double x, Double eps);
+    Double ln(Double x);
 }

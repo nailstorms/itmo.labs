@@ -10,19 +10,23 @@ public class Trig implements ITrig {
         this.baseTrig = baseTrig;
     }
 
-    public Double sin(Double x, Double eps) {
-        return baseTrig.sin(x, eps);
+    public Double sin(Double x) {
+        return baseTrig.sin(x);
     }
 
-    public Double cos(Double x, Double eps) {
-        return baseTrig.sin(x + Math.PI / 2, eps);
+    public Double cos(Double x) {
+        return baseTrig.sin(x + Math.PI / 2);
     }
 
-    public Double tan(Double x, Double eps) {
-        return this.cos(x, eps) == 0.0 ? Double.NaN : this.sin(x, eps) / this.cos(x, eps);
+    public Double tan(Double x) {
+        return this.cos(x) == 0.0
+                ? (this.sin(x) < 0 ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY)
+                : this.sin(x) / this.cos(x);
     }
 
-    public Double sec(Double x, Double eps) {
-        return this.cos(x, eps) == 0.0 ? Double.NaN : 1.0 / this.cos(x, eps);
+    public Double sec(Double x) {
+        return this.cos(x) == 0.0
+                ? Double.POSITIVE_INFINITY
+                : 1.0 / this.cos(x);
     }
 }

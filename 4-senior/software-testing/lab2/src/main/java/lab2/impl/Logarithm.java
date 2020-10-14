@@ -1,5 +1,6 @@
 package lab2.impl;
 
+import lab2.Constant;
 import lab2.IBaseLogarithm;
 import lab2.ILogarithm;
 
@@ -10,15 +11,14 @@ public class Logarithm implements ILogarithm {
         this.baseLogarithm = baseLogarithm;
     }
 
-    public Double ln(Double x, Double eps) {
-        return baseLogarithm.ln(x, eps);
+    public Double ln(Double x) {
+        return baseLogarithm.ln(x);
     }
 
-    public Double log(Double x, Double base, Double eps) {
+    public Double log(Double x, Double base) {
         return x.isNaN() || x.isInfinite()
-                || eps.isNaN() || eps.isInfinite()
-                || base.isNaN() || base.isInfinite() || x <= eps
+                || base.isNaN() || base.isInfinite() || x <= Constant.eps
                     ? Double.NaN
-                    : baseLogarithm.ln(x, eps) / baseLogarithm.ln(base, eps);
+                    : baseLogarithm.ln(x) / baseLogarithm.ln(base);
     }
 }
