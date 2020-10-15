@@ -1,11 +1,10 @@
 package lab2.impl;
 
-import lab2.Constant;
 import lab2.IBaseLogarithm;
 
 public class BaseLogarithm implements IBaseLogarithm {
-    public Double ln(Double x) {
-        if (x <= 0 || x <= Constant.eps || x.isNaN())
+    public Double ln(Double x, Double eps) {
+        if (x <= 0 || x <= eps || x.isNaN())
             return Double.NaN;
         if (x == Double.POSITIVE_INFINITY)
             return Double.POSITIVE_INFINITY;
@@ -14,7 +13,7 @@ public class BaseLogarithm implements IBaseLogarithm {
             double nom = xTemp;
             double res = 0.0;
             int i = 3;
-            while (Math.abs(2 * nom) > Constant.eps / 10) {
+            while (Math.abs(2 * nom) > eps / 10) {
                 res += 2 * nom;
                 nom *= xTemp * xTemp / i * (i - 2);
                 i += 2;
