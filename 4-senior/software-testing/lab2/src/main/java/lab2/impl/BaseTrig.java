@@ -7,7 +7,7 @@ import static java.lang.Math.PI;
 
 public class BaseTrig implements IBaseTrig {
     public Double sin(Double x, Double eps) {
-        if (x.isInfinite() || x.isNaN())
+        if (x.isInfinite() || x.isNaN() || eps.isInfinite() || eps.isNaN())
             return Double.NaN;
 
         double x1 = x % (2 * PI);

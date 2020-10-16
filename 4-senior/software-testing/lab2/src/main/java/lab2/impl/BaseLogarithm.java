@@ -4,7 +4,7 @@ import lab2.IBaseLogarithm;
 
 public class BaseLogarithm implements IBaseLogarithm {
     public Double ln(Double x, Double eps) {
-        if (x <= 0 || x <= eps || x.isNaN())
+        if (x <= 0 || x <= eps || x.isNaN() || eps.isInfinite() || eps.isNaN())
             return Double.NaN;
         if (x == Double.POSITIVE_INFINITY)
             return Double.POSITIVE_INFINITY;

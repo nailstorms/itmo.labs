@@ -1,0 +1,34 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Lab2Suite">
+    <test name="Automated tests for equation system functionality">
+        <classes>
+            <class name="lab2.TestEquationSystemSolver"/>
+        </classes>
+    </test>
+
+    <test name="Automated tests for derivative trigonometric functions">
+        <classes>
+            <class name="lab2.TestTrig"/>
+        </classes>
+    </test>
+
+    <test name="Automated tests for derivative logarithmic functions">
+        <classes>
+            <class name="lab2.TestLogarithm"/>
+        </classes>
+    </test>
+
+    <test name="Automated tests for sine computation">
+        <classes>
+            <class name="lab2.TestBaseTrig"/>
+        </classes>
+    </test>
+
+    <test name="Automated tests for natural logarithm computation">
+        <classes>
+            <class name="lab2.TestBaseLogarithm"/>
+        </classes>
+    </test>
+
+</suite>

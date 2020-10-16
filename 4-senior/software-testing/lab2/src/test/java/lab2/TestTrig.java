@@ -10,9 +10,10 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.mockito.Mockito.*;
-import static lab2.util.DoubleUtil.*;
 
 public class TestTrig {
+    private static final double EPS = 1E-8;
+
     @Mock
     private IBaseTrig mockIBaseTrig;
 
@@ -37,18 +38,31 @@ public class TestTrig {
                 };
     }
 
+    @DataProvider(name = "TrigNegativeTestData")
+    public Object[][] trigNegativeTestData() {
+        return new Object[][]
+                {
+                        {0.0, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {0.0, Double.POSITIVE_INFINITY, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {0.0, Double.NEGATIVE_INFINITY, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {Double.NaN, Constant.eps, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {Double.POSITIVE_INFINITY, Constant.eps, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {Double.NEGATIVE_INFINITY, Constant.eps, Double.NaN, Double.NaN, Double.NaN, Double.NaN}
+                };
+    }
+
     @Test(dataProvider = "TrigTestData")
     public void testTrigSinStubbed(Double x, Double sin, Double cos, Double tan, Double sec) {
         when(mockIBaseTrig.sin(eq(x), anyDouble())).thenReturn(sin);
 
-        Assert.assertEquals(round(new Trig(mockIBaseTrig).sin(x, eps), 6), round(sin, 6));
+        Assert.assertEquals(new Trig(mockIBaseTrig).sin(x, EPS), sin, EPS);
     }
 
     @Test(dataProvider = "TrigTestData")
     public void testTrigCosStubbed(Double x, Double sin, Double cos, Double tan, Double sec) {
         when(mockIBaseTrig.sin(eq(x + Math.PI / 2), anyDouble())).thenReturn(cos);
 
-        Assert.assertEquals(round(new Trig(mockIBaseTrig).cos(x, eps), 6), round(cos, 6));
+        Assert.assertEquals(new Trig(mockIBaseTrig).cos(x, EPS), cos, EPS);
     }
 
     @Test(dataProvider = "TrigTestData")
@@ -56,7 +70,7 @@ public class TestTrig {
         when(mockIBaseTrig.sin(eq(x), anyDouble())).thenReturn(sin);
         when(mockIBaseTrig.sin(eq(x + Math.PI / 2), anyDouble())).thenReturn(cos);
 
-        Assert.assertEquals(round(new Trig(mockIBaseTrig).tan(x, eps), 6), round(tan, 6));
+        Assert.assertEquals(new Trig(mockIBaseTrig).tan(x, EPS), tan, EPS);
     }
 
     @Test(dataProvider = "TrigTestData")
@@ -64,30 +78,49 @@ public class TestTrig {
         when(mockIBaseTrig.sin(eq(x), anyDouble())).thenReturn(sin);
         when(mockIBaseTrig.sin(eq(x + Math.PI / 2), anyDouble())).thenReturn(cos);
 
-        Assert.assertEquals(round(new Trig(mockIBaseTrig).sec(x, eps), 6), round(sec, 6));
+        Assert.assertEquals(new Trig(mockIBaseTrig).sec(x, EPS), sec, EPS);
+    }
+
+    @Test(dataProvider = "TrigNegativeTestData")
+    public void testTrigNegativeStubbed(Double x, Double eps, Double sin, Double cos, Double tan, Double sec) {
+        when(mockIBaseTrig.sin(eq(x), doubleThat(e -> !(e.isInfinite() || e.isNaN())))).thenReturn(sin);
+        when(mockIBaseTrig.sin(eq(x), doubleThat(e -> e.isInfinite() || e.isNaN()))).thenReturn(Double.NaN);
+        when(mockIBaseTrig.sin(eq(x + Math.PI / 2), doubleThat(e -> !(e.isInfinite() || e.isNaN())))).thenReturn(cos);
+        when(mockIBaseTrig.sin(eq(x + Math.PI / 2), doubleThat(e -> e.isInfinite() || e.isNaN()))).thenReturn(Double.NaN);
+
+        Trig trig = new Trig(mockIBaseTrig);
+        Assert.assertEquals(trig.sin(x, eps), sin);
+        Assert.assertEquals(trig.cos(x, eps), cos);
+        Assert.assertEquals(trig.tan(x, eps), tan);
+        Assert.assertEquals(trig.sec(x, eps), sec);
     }
 
     @Test(dataProvider = "TrigTestData")
     public void testTrigSin(Double x, Double sin, Double cos, Double tan, Double sec) {
-        Assert.assertEquals(round(new Trig(new BaseTrig()).sin(x, eps), 6), round(sin, 6));
+        Assert.assertEquals(new Trig(new BaseTrig()).sin(x, EPS), sin, EPS);
     }
 
     @Test(dataProvider = "TrigTestData")
     public void testTrigCos(Double x, Double sin, Double cos, Double tan, Double sec) {
-        Assert.assertEquals(round(new Trig(new BaseTrig()).cos(x, eps), 6), round(cos, 6));
+        Assert.assertEquals(new Trig(new BaseTrig()).cos(x, EPS), cos, EPS);
     }
 
     @Test(dataProvider = "TrigTestData")
     public void testTrigTan(Double x, Double sin, Double cos, Double tan, Double sec) {
-        Assert.assertEquals(round(new Trig(new BaseTrig()).tan(x, eps), 6), round(tan, 6));
+        Assert.assertEquals(new Trig(new BaseTrig()).tan(x, EPS), tan, EPS);
     }
 
     @Test(dataProvider = "TrigTestData")
     public void testTrigSec(Double x, Double sin, Double cos, Double tan, Double sec) {
-        Assert.assertEquals(round(new Trig(new BaseTrig()).sec(x, eps), 6), round(sec, 6));
+        Assert.assertEquals(new Trig(new BaseTrig()).sec(x, EPS), sec, EPS);
     }
 
-
-
-    private static double eps = Constant.eps/100;
+    @Test(dataProvider = "TrigNegativeTestData")
+    public void testTrigNegative(Double x, Double eps, Double sin, Double cos, Double tan, Double sec) {
+        Trig trig = new Trig(new BaseTrig());
+        Assert.assertEquals(trig.sin(x, eps), sin);
+        Assert.assertEquals(trig.cos(x, eps), cos);
+        Assert.assertEquals(trig.tan(x, eps), tan);
+        Assert.assertEquals(trig.sec(x, eps), sec);
+    }
 }

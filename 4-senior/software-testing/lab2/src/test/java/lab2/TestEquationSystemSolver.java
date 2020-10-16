@@ -4,7 +4,6 @@ import lab2.impl.BaseLogarithm;
 import lab2.impl.BaseTrig;
 import lab2.impl.Logarithm;
 import lab2.impl.Trig;
-import lab2.util.DoubleUtil;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.Assert;
@@ -15,6 +14,8 @@ import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
 
 public class TestEquationSystemSolver {
+    private static final Double PRECISION = 1E-5;
+
     @Mock
     private ILogarithm mockILogarithm;
 
@@ -63,7 +64,7 @@ public class TestEquationSystemSolver {
         mockTrig(x, sin, cos, tan, sec);
         mockLogarithm(x, ln, log2, log3, log10);
         EquationSystemSolver solver = new EquationSystemSolver(mockILogarithm, mockITrig);
-        Assert.assertEquals(DoubleUtil.round(solver.solve(x, Constant.eps)), expected);
+        Assert.assertEquals(solver.solve(x, Constant.eps), expected, PRECISION);
     }
 
     @Test(dataProvider = "EquationSystemTestData")
@@ -72,7 +73,7 @@ public class TestEquationSystemSolver {
                                                 Double expected) {
         mockLogarithm(x, ln, log2, log3, log10);
         EquationSystemSolver solver = new EquationSystemSolver(mockILogarithm, new Trig(new BaseTrig()));
-        Assert.assertEquals(DoubleUtil.round(solver.solve(x, Constant.eps)), expected);
+        Assert.assertEquals(solver.solve(x, Constant.eps), expected, PRECISION);
     }
 
     @Test(dataProvider = "EquationSystemTestData")
@@ -81,7 +82,7 @@ public class TestEquationSystemSolver {
                                                 Double expected) {
         mockTrig(x, sin, cos, tan, sec);
         EquationSystemSolver solver = new EquationSystemSolver(new Logarithm(new BaseLogarithm()), mockITrig);
-        Assert.assertEquals(DoubleUtil.round(solver.solve(x, Constant.eps)), expected);
+        Assert.assertEquals(solver.solve(x, Constant.eps), expected, PRECISION);
     }
 
     @Test(dataProvider = "EquationSystemTestData")
@@ -89,7 +90,7 @@ public class TestEquationSystemSolver {
                                                  Double ln, Double log2, Double log3, Double log10,
                                                  Double expected) {
         EquationSystemSolver solver = new EquationSystemSolver(new Logarithm(new BaseLogarithm()), new Trig(new BaseTrig()));
-        Assert.assertEquals(DoubleUtil.round(solver.solve(x, Constant.eps)), expected);
+        Assert.assertEquals(solver.solve(x, Constant.eps), expected, PRECISION);
     }
 
     private void mockTrig(Double x, Double sin, Double cos, Double tan, Double sec) {
