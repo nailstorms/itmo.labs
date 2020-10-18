@@ -29,7 +29,7 @@ public class Logarithm implements ILogarithm {
             FileWriter fw = new FileWriter(filepath);
             fw.write("x,ln,log2,log3,log10\n");
             double tempVar = leftBound;
-            while (tempVar < rightBound) {
+            while (tempVar <= rightBound) {
                 fw.append(String.format("%s,%s,%s,%s,%s\n",
                         tempVar,
                         this.ln(tempVar, Constant.eps),

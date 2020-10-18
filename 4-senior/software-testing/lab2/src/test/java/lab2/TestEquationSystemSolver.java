@@ -57,6 +57,19 @@ public class TestEquationSystemSolver {
                 };
     }
 
+    @DataProvider(name = "EquationSystemNegativeTestData")
+    public Object[][] equationSystemNegativeTestData() {
+        return new Object[][]
+                {
+                        {Double.NaN, Constant.eps, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {Double.POSITIVE_INFINITY, Constant.eps, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {Double.NEGATIVE_INFINITY, Constant.eps, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {Constant.eps, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {Constant.eps, Double.POSITIVE_INFINITY, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {Constant.eps, Double.NEGATIVE_INFINITY, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                };
+    }
+
     @Test(dataProvider = "EquationSystemTestData")
     public void testEquationSystemSolverStubbed(Double x, Double sin, Double cos, Double tan, Double sec,
                                          Double ln, Double log2, Double log3, Double log10,
@@ -89,6 +102,15 @@ public class TestEquationSystemSolver {
     public void testEquationSystemSolver(Double x, Double sin, Double cos, Double tan, Double sec,
                                                  Double ln, Double log2, Double log3, Double log10,
                                                  Double expected) {
+        EquationSystemSolver solver = new EquationSystemSolver(new Logarithm(new BaseLogarithm()), new Trig(new BaseTrig()));
+        Assert.assertEquals(solver.solve(x, Constant.eps), expected, PRECISION);
+    }
+
+    @Test(dataProvider = "EquationSystemNegativeTestData")
+    public void testEquationSystemSolverNegative(Double x, Double eps,
+                                                    Double sin, Double cos, Double tan, Double sec,
+                                                    Double ln, Double log2, Double log3, Double log10,
+                                                    Double expected) {
         EquationSystemSolver solver = new EquationSystemSolver(new Logarithm(new BaseLogarithm()), new Trig(new BaseTrig()));
         Assert.assertEquals(solver.solve(x, Constant.eps), expected, PRECISION);
     }

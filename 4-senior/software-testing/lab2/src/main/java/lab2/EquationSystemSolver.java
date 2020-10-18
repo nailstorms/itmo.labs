@@ -38,7 +38,7 @@ public class EquationSystemSolver {
             FileWriter fw = new FileWriter(filepath);
             fw.write("x,result\n");
             double tempVar = leftBound;
-            while (tempVar < rightBound) {
+            while (tempVar <= rightBound) {
                 fw.append(String.format("%s,%s\n", tempVar, this.solve(tempVar, Constant.eps)));
                 tempVar += step;
             }

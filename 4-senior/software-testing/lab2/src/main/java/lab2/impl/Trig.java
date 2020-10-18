@@ -38,7 +38,7 @@ public class Trig implements ITrig {
             FileWriter fw = new FileWriter(filepath);
             fw.write("x,sin,cos,tan,sec\n");
             double tempVar = leftBound;
-            while (tempVar < rightBound) {
+            while (tempVar <= rightBound) {
                 fw.append(String.format("%s,%s,%s,%s,%s\n",
                         tempVar,
                         this.sin(tempVar, Constant.eps),
