@@ -1,41 +1,46 @@
 package exist.test;
 
-import exist.page.MainPage;
-import exist.page.RegistrationPage;
-import exist.page.SuccessfulRegistrationPage;
+import exist.page.*;
 import lab3.framework.browser.BrowserSingleton;
+import lab3.utils.ConfigReader;
 import lab3.utils.RandomGenerator;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
+import org.json.simple.JSONObject;
+import org.junit.*;
 import org.openqa.selenium.WebDriver;
 
 public class UnauthorizedUserTest {
+    private static JSONObject credentialsData;
+    private static JSONObject testData;
     private WebDriver driver;
 
+    @BeforeClass
+    public static void setupData() {
+        credentialsData = ConfigReader.readJSONConfig("src/test/resources/credentials.json");
+        testData = ConfigReader.readJSONConfig("src/test/resources/data.json");
+    }
+
     @Before
-    public void setup() {
+    public void setupDriver() {
         driver = BrowserSingleton.getInstance();
         driver.manage().window().maximize();
     }
 
     @After
-    public void teardown() {
+    public void resetDriver() {
         BrowserSingleton.resetInstance();
     }
 
     @Test
     public void testUserRegistration() {
-        driver.get("https://exist.ru/");
+        driver.get(testData.get("mainUrl").toString());
         MainPage mainPage = new MainPage();
-        Assertions.assertTrue(mainPage.isLoaded());
+        Assert.assertTrue(mainPage.isLoaded());
 
         RegistrationPage registrationPage = mainPage.gotoRegister();
-        Assertions.assertTrue(registrationPage.isLoaded());
+        Assert.assertTrue(registrationPage.isLoaded());
 
         registrationPage.clickRegisterAsNatural();
-        Assertions.assertTrue(registrationPage.isNaturalPersonRadioActive());
+        Assert.assertTrue(registrationPage.isNaturalPersonRadioActive());
 
         registrationPage.selectRandomCityFromList();
         registrationPage.selectFirstOfficeFromList();
@@ -47,7 +52,54 @@ public class UnauthorizedUserTest {
         registrationPage.tickAgreementBox();
 
         SuccessfulRegistrationPage successPage = registrationPage.clickSubmitBtn();
-        Assertions.assertTrue(successPage.isLoaded());
+        Assert.assertTrue(successPage.isLoaded());
     }
 
+    @Test
+    public void testUserAuthorization() {
+        driver.get(testData.get("mainUrl").toString());
+        MainPage mainPage = new MainPage();
+        Assert.assertTrue(mainPage.isLoaded());
+
+        mainPage.clickLoginBtn();
+        Assert.assertTrue(mainPage.isLoginFormVisible());
+
+        mainPage.enterUsername(credentialsData.get("username").toString());
+        mainPage.enterPassword(credentialsData.get("password").toString());
+        mainPage.clickAuthorizationBtn();
+
+        Assert.assertEquals(mainPage.getCurrentUserName(), credentialsData.get("username").toString());
+    }
+
+    @Test
+    public void testGeneralCatalogSearch() {
+        driver.get(testData.get("mainUrl").toString());
+        MainPage mainPage = new MainPage();
+        Assert.assertTrue(mainPage.isLoaded());
+
+        mainPage.clickCatalog();
+        Assert.assertTrue(mainPage.isCatalogMenuVisible());
+
+        GeneralCatalogPage generalCatalogPage = mainPage.gotoGeneralCatalog();
+        Assert.assertTrue(generalCatalogPage.isLoaded());
+
+        int selectedTransportTypeIndex = generalCatalogPage.clickRandomTransportType();
+
+        VendorAutoPage vendorAutoPage = generalCatalogPage.clickRandomVendor(selectedTransportTypeIndex);
+        Assert.assertTrue(vendorAutoPage.isLoaded());
+
+        Assert.assertEquals(vendorAutoPage.getCurrentVendorFromPage(), vendorAutoPage.currentVendorExpected);
+    }
+
+    @Test
+    public void testQuerySearch() {
+        driver.get(testData.get("mainUrl").toString());
+        MainPage mainPage = new MainPage();
+        Assert.assertTrue(mainPage.isLoaded());
+
+        SearchResultPage searchResultPage = mainPage.searchForQuery(testData.get("searchSample").toString());
+        Assert.assertTrue(searchResultPage.isLoaded());
+
+        Assert.assertTrue(searchResultPage.isResultCorrect());
+    }
 }

@@ -23,7 +23,7 @@ public class RandomGenerator {
     public static String getRandomCyrillicWord(int length) {
         Random rd = new Random();
         StringBuilder generatedString = new StringBuilder();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < length; i++) {
             int randomSequence = rd.nextInt(CYRILLIC_CHARACTERS.length());
             generatedString.append(CYRILLIC_CHARACTERS.charAt(randomSequence));
         }
@@ -32,9 +32,13 @@ public class RandomGenerator {
     }
 
     public static String generateRandomPhoneNumber() {
+        return generateRandomNumber(10);
+    }
+
+    public static String generateRandomNumber(int length) {
         Random rd = new Random();
         StringBuilder generatedString = new StringBuilder();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < length; i++) {
             int randomSequence = rd.nextInt(NUMBERS.length());
             generatedString.append(NUMBERS.charAt(randomSequence));
         }
@@ -42,7 +46,7 @@ public class RandomGenerator {
         return generatedString.toString();
     }
 
-    public static int getRandomNumber(int ceiling) {
+    public static int getRandomInt(int ceiling) {
         Random r = new Random();
         return r.nextInt(ceiling);
     }

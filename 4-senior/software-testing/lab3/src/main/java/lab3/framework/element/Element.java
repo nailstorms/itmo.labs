@@ -1,15 +1,10 @@
 package lab3.framework.element;
 
 import lab3.framework.browser.BrowserSingleton;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.util.Objects;
 
 public class Element {
     private String locator;
@@ -19,11 +14,20 @@ public class Element {
     }
 
     public void click() {
-        Objects.requireNonNull(this.getElement()).click();
+        if (this.isExisting() && this.isClickable())
+            this.getElement().click();
+    }
+
+    public void clickJs() {
+        JavascriptExecutor executor = (JavascriptExecutor) BrowserSingleton.getInstance();
+        if (this.isExisting() && this.isClickable())
+            executor.executeScript("arguments[0].click();", this.getElement());
     }
 
     public String getAttribute(String attr) {
-        return Objects.requireNonNull(this.getElement()).getAttribute(attr);
+        if (this.isExisting())
+            return this.getElement().getAttribute(attr);
+        return null;
     }
 
     public boolean isExisting() {

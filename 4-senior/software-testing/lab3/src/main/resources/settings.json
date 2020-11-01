@@ -1,4 +1,4 @@
 {
   "browser": "chrome",
-  "waitTimeSec": 30
+  "waitTimeSec": 20
 }

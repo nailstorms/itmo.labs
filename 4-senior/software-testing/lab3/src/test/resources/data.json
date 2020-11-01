@@ -1,3 +1,13 @@
 {
-  "city": "Санкт-Петербург"
+  "mainUrl": "https://exist.ru/",
+  "searchSample": "TT-008",
+  "part": "Актуатор РКПП",
+  "requestStatus": "ОЖИДАНИЕ ОБРАБОТКИ",
+  "carName": "Chrysler Voyager III 3.0",
+  "carReleaseYear": "2000",
+  "carVendor": "Chrysler",
+  "carModel": "Voyager III",
+  "carModelType": "3.0",
+  "carEngine": "EFA",
+  "carPower": "152"
 }

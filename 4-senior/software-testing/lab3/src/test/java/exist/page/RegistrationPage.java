@@ -45,7 +45,7 @@ public class RegistrationPage {
     public void selectRandomCityFromList() {
         this.cityInputField.setValue(RandomGenerator.getRandomCyrillicLetter());
         List<WebElement> elements = this.availableCitiesList.getElements();
-        elements.get(RandomGenerator.getRandomNumber(elements.size())).click();
+        elements.get(RandomGenerator.getRandomInt(elements.size())).click();
     }
 
     public void selectOffice(int officeNum) {
