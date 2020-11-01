@@ -1,8 +1,11 @@
 package exist.page;
 
+import lab3.framework.browser.BrowserSingleton;
 import lab3.framework.element.Element;
 import lab3.framework.element.InputField;
 import lab3.framework.element.TextContainer;
+
+import java.util.ArrayList;
 
 public class MainPage {
     private Element logoContainer = new Element("//*[contains(@title,'Автозапчасти EXIST.RU')]");
@@ -18,7 +21,7 @@ public class MainPage {
     private Element catalogContainer = new Element("//div[contains(@class,'catalogs-float__container')]");
     private Element generalCatalogBtn = new Element("//div[contains(@class,'catalogs-float__container')]//*[normalize-space(text())='Общий каталог']");
     private Element motorOilCatalogBtn = new Element("//div[contains(@class,'catalogs-float__container')]//*[normalize-space(text())='Масла моторные']");
-    private Element sellAutoBtn = new Element("//div[contains(@class,'mainmenu')]//a[contains(text(),'Продажа авто')]");
+    private Element sellAutoBtn = new Element("//div[contains(@class,'mainmenu')]//a[contains(text(),'Продажа Авто')]");
     private Element autoPointsBtn = new Element("//div[contains(@class,'mainmenu')]//a[contains(text(),'АвтоТочки')]");
     private Element forumBtn = new Element("//div[contains(@class,'mainmenu')]//a[contains(text(),'Форум')]");
     private Element clubBtn = new Element("//div[contains(@class,'mainmenu')]//a[contains(text(),'Клуб')]");
@@ -29,6 +32,7 @@ public class MainPage {
     private Element gotoOrdersBtn = new Element("//*[contains(@class,'shop-functions__orders')]");
     private InputField searchInputField = new InputField("//form[@id='search-form']//input[contains(@class,'search-input')]");
     private Element searchArticleSuggestionContainer = new Element("//form[@id='search-form']//*[contains(normalize-space(text()),'Поиск по Артикулу')]");
+    private Element errorLoginContainer = new Element("//div[contains(@class,'alert-danger')]");
 
     public boolean isLoaded() {
         return logoContainer.isVisible();
@@ -57,6 +61,10 @@ public class MainPage {
 
     public boolean isLoginFormVisible() {
         return this.loginFormContainer.isVisible();
+    }
+
+    public boolean isAuthorizationFailed() {
+        return this.errorLoginContainer.isVisible();
     }
 
     public String getCurrentUserName() {
@@ -108,5 +116,22 @@ public class MainPage {
     public AddNewCarPage gotoAddNewCar() {
         this.addNewCarBtn.clickJs();
         return new AddNewCarPage();
+    }
+
+    public SellAutoPage gotoSellAutoService() {
+        this.sellAutoBtn.click();
+        ArrayList<String> tabs = BrowserSingleton.getTabs();
+        BrowserSingleton.getInstance().switchTo().window(tabs.get(0));
+        return new SellAutoPage();
+    }
+
+    public AutopointsPage gotoAutopoints() {
+        this.autoPointsBtn.click();
+        return new AutopointsPage();
+    }
+
+    public ForumListPage gotoForums() {
+        this.forumBtn.click();
+        return new ForumListPage();
     }
 }

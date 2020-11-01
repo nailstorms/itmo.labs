@@ -72,6 +72,22 @@ public class UnauthorizedUserTest {
     }
 
     @Test
+    public void testUserAuthorizationInvalid() {
+        driver.get(testData.get("mainUrl").toString());
+        MainPage mainPage = new MainPage();
+        Assert.assertTrue(mainPage.isLoaded());
+
+        mainPage.clickLoginBtn();
+        Assert.assertTrue(mainPage.isLoginFormVisible());
+
+        mainPage.enterUsername(RandomGenerator.generateRandomEmail(5));
+        mainPage.enterPassword(RandomGenerator.generateRandomNumber(10));
+        mainPage.clickAuthorizationBtn();
+
+        Assert.assertTrue(mainPage.isAuthorizationFailed());
+    }
+
+    @Test
     public void testGeneralCatalogSearch() {
         driver.get(testData.get("mainUrl").toString());
         MainPage mainPage = new MainPage();

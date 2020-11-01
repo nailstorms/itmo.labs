@@ -9,5 +9,7 @@
   "carModel": "Voyager III",
   "carModelType": "3.0",
   "carEngine": "EFA",
-  "carPower": "152"
+  "carPower": "152",
+  "selectedService": "сход-развал",
+  "selectedServiceV2": "Сход/развал"
 }

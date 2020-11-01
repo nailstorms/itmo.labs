@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
 
+
 public class AuthorizedUserTest {
     private static JSONObject credentialsData;
     private static JSONObject testData;
@@ -51,6 +52,46 @@ public class AuthorizedUserTest {
 
         Assert.assertEquals("0", orderHistoryPage.getCurrentOrderCountStr());
         Assert.assertEquals("0", orderHistoryPage.getArchivedOrderCountStr());
+    }
+
+    @Test
+    public void testGotoSellAutoService() {
+        driver.get(testData.get("mainUrl").toString());
+        MainPage mainPage = this.authenticateUser();
+
+        SellAutoPage sellAutoPage = mainPage.gotoSellAutoService();
+        Assert.assertTrue(sellAutoPage.isLoaded());
+    }
+
+    @Test
+    public void testSelectAutopointService() {
+        driver.get(testData.get("mainUrl").toString());
+        MainPage mainPage = this.authenticateUser();
+
+        AutopointsPage autopointsPage = mainPage.gotoAutopoints();
+        Assert.assertTrue(autopointsPage.isLoaded());
+
+        AutopointMapPage autopointMapPage = autopointsPage.selectService(testData.get("selectedService").toString());
+        Assert.assertTrue(autopointMapPage.isLoaded());
+
+        Assert.assertTrue(autopointMapPage.isServiceChecked(testData.get("selectedServiceV2").toString()));
+    }
+
+    @Test
+    public void testGotoForum() {
+        driver.get(testData.get("mainUrl").toString());
+        MainPage mainPage = this.authenticateUser();
+
+        ForumListPage forumListPage = mainPage.gotoForums();
+        Assert.assertTrue(forumListPage.isLoaded());
+
+        ForumPage forumPage = forumListPage.gotoRandomForum();
+        Assert.assertTrue(forumPage.isLoaded());
+        Assert.assertTrue(forumPage.isCorrectForum());
+
+        ForumDiscussionPage forumDiscussionPage = forumPage.gotoRandomForumDiscussion();
+        Assert.assertTrue(forumDiscussionPage.isLoaded());
+        Assert.assertTrue(forumDiscussionPage.isCorrectDiscussion());
     }
 
     @Test
@@ -143,7 +184,6 @@ public class AuthorizedUserTest {
     }
 
     private MainPage authenticateUser() {
-        driver.get(testData.get("mainUrl").toString());
         MainPage mainPage = new MainPage();
         Assert.assertTrue(mainPage.isLoaded());
 

@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.util.ArrayList;
+
 
 public class BrowserSingleton {
     private static volatile WebDriver instance;
@@ -62,5 +64,17 @@ public class BrowserSingleton {
     public static int getWaitTime() {
         config = getConfig();
         return Integer.parseInt(config.get("waitTimeSec").toString());
+    }
+
+    public static ArrayList<String> getTabs() {
+        return new ArrayList<>(instance.getWindowHandles());
+    }
+
+    public static void waitMs() {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ignored) {
+
+        }
     }
 }
