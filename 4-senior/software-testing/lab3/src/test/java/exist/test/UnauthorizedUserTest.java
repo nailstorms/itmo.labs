@@ -118,4 +118,35 @@ public class UnauthorizedUserTest {
 
         Assert.assertTrue(searchResultPage.isResultCorrect());
     }
+
+    @Test
+    public void testGotoSellAutoService() {
+        driver.get(testData.get("mainUrl").toString());
+        MainPage mainPage = new MainPage();
+        Assert.assertTrue(mainPage.isLoaded());
+
+        SellAutoPage sellAutoPage = mainPage.gotoSellAutoService();
+        Assert.assertTrue(sellAutoPage.isLoaded());
+    }
+
+    @Test
+    public void testSearchForAutoSales() {
+        driver.get(testData.get("mainUrl").toString());
+        MainPage mainPage = new MainPage();
+        Assert.assertTrue(mainPage.isLoaded());
+
+        SellAutoPage sellAutoPage = mainPage.gotoSellAutoService();
+        Assert.assertTrue(sellAutoPage.isLoaded());
+
+        AutoSalesPage autoSalesPage = sellAutoPage.gotoSales();
+        Assert.assertTrue(autoSalesPage.isLoaded());
+
+        String selectedMake = autoSalesPage.selectRandomMake();
+        String selectedModel = autoSalesPage.selectRandomModel();
+        autoSalesPage.searchForCar();
+        String carMakeModel = !selectedMake.equals("")
+                ? (!selectedModel.equals("") ? selectedMake + " " + selectedModel : selectedMake)
+                : "";
+        Assert.assertTrue(autoSalesPage.isResultListCorrect(carMakeModel));
+    }
 }

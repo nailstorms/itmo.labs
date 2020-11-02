@@ -55,15 +55,6 @@ public class AuthorizedUserTest {
     }
 
     @Test
-    public void testGotoSellAutoService() {
-        driver.get(testData.get("mainUrl").toString());
-        MainPage mainPage = this.authenticateUser();
-
-        SellAutoPage sellAutoPage = mainPage.gotoSellAutoService();
-        Assert.assertTrue(sellAutoPage.isLoaded());
-    }
-
-    @Test
     public void testSelectAutopointService() {
         driver.get(testData.get("mainUrl").toString());
         MainPage mainPage = this.authenticateUser();

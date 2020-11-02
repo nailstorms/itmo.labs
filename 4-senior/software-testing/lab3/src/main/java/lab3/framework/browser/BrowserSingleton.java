@@ -3,11 +3,15 @@ package lab3.framework.browser;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lab3.utils.ConfigReader;
 import org.json.simple.JSONObject;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 
 public class BrowserSingleton {
@@ -71,8 +75,12 @@ public class BrowserSingleton {
     }
 
     public static void waitMs() {
+        waitMs(100);
+    }
+
+    public static void waitMs(int millis) {
         try {
-            Thread.sleep(100);
+            Thread.sleep(millis);
         } catch (InterruptedException ignored) {
 
         }

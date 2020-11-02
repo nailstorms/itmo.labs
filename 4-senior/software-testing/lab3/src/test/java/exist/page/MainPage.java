@@ -4,6 +4,7 @@ import lab3.framework.browser.BrowserSingleton;
 import lab3.framework.element.Element;
 import lab3.framework.element.InputField;
 import lab3.framework.element.TextContainer;
+import org.openqa.selenium.JavascriptExecutor;
 
 import java.util.ArrayList;
 
@@ -24,7 +25,6 @@ public class MainPage {
     private Element sellAutoBtn = new Element("//div[contains(@class,'mainmenu')]//a[contains(text(),'Продажа Авто')]");
     private Element autoPointsBtn = new Element("//div[contains(@class,'mainmenu')]//a[contains(text(),'АвтоТочки')]");
     private Element forumBtn = new Element("//div[contains(@class,'mainmenu')]//a[contains(text(),'Форум')]");
-    private Element clubBtn = new Element("//div[contains(@class,'mainmenu')]//a[contains(text(),'Клуб')]");
     private Element garageBtn = new Element("//div[contains(@class,'garage')]//*[contains(text(),'Гараж')]");
     private Element garageMenuContainer = new Element("//div[contains(@class,'carSelectionMode')]");
     private Element addNewCarBtn = new Element("//div[contains(@class,'carSelectionMode')]//*[@id='addNew']");
@@ -119,9 +119,7 @@ public class MainPage {
     }
 
     public SellAutoPage gotoSellAutoService() {
-        this.sellAutoBtn.click();
-        ArrayList<String> tabs = BrowserSingleton.getTabs();
-        BrowserSingleton.getInstance().switchTo().window(tabs.get(0));
+        this.sellAutoBtn.clickJs();
         return new SellAutoPage();
     }
 

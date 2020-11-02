@@ -27,7 +27,7 @@ public class GaragePage {
     }
 
     public void removeCarFromGarage() {
-        this.removeCarBtn.clickJs();
+        this.removeCarBtn.click();
     }
 
     public boolean isRemoveCarModalVisible() {
