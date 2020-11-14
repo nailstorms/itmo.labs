@@ -82,7 +82,7 @@ public class AuthorizedUserTest {
 
         ForumDiscussionPage forumDiscussionPage = forumPage.gotoRandomForumDiscussion();
         Assert.assertTrue(forumDiscussionPage.isLoaded());
-        Assert.assertTrue(forumDiscussionPage.isCorrectDiscussion());
+        Assert.assertEquals(forumDiscussionPage.forumDiscussionNameExpected, forumDiscussionPage.getDiscussionName());
     }
 
     @Test

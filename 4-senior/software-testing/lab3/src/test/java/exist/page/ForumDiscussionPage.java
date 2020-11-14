@@ -18,8 +18,7 @@ public class ForumDiscussionPage {
         return this.forumDiscussionsContainer.isVisible();
     }
 
-    public boolean isCorrectDiscussion() {
-        String prettyName = this.forumDiscussionNameContainer.getText().trim();
-        return prettyName.equals(forumDiscussionNameExpected);
+    public String getDiscussionName() {
+        return this.forumDiscussionNameContainer.getText().trim();
     }
 }

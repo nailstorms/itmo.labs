@@ -29,7 +29,7 @@ public class VinRequestsListPage {
         this.cancelRequestBtn.click();
         BrowserSingleton.getInstance().switchTo().alert().accept();
         BrowserSingleton.getInstance().switchTo().defaultContent();
-        BrowserSingleton.waitMs();
+        BrowserSingleton.waitMs(300);
     }
 
     public void clickGarageBtn() {

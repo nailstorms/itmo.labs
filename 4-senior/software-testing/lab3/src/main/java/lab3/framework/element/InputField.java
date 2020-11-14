@@ -1,6 +1,6 @@
 package lab3.framework.element;
 
-public class InputField extends Element {
+public class InputField extends TextContainer {
     public InputField(String locator) {
         super(locator);
     }
