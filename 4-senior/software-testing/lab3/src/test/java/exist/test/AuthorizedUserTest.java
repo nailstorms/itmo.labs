@@ -32,6 +32,17 @@ public class AuthorizedUserTest {
     }
 
     @Test
+    public void testPersonalPage() {
+        driver.get(testData.get("mainUrl").toString());
+        MainPage mainPage = this.authenticateUser();
+
+        PersonalPage personalPage = mainPage.gotoPersonalPage();
+        Assert.assertTrue(personalPage.isLoaded());
+
+        Assert.assertEquals(credentialsData.get("name").toString(), personalPage.getCurrentUserNameFromPage());
+    }
+
+    @Test
     public void testGotoBasket() {
         driver.get(testData.get("mainUrl").toString());
         MainPage mainPage = this.authenticateUser();
@@ -54,24 +65,6 @@ public class AuthorizedUserTest {
         Assert.assertEquals("0", orderHistoryPage.getArchivedOrderCountStr());
     }
 
-    @Test
-    public void testSelectAutopointService() {
-        driver.get(testData.get("mainUrl").toString());
-        MainPage mainPage = this.authenticateUser();
-
-        AutopointsPage autopointsPage = mainPage.gotoAutopoints();
-        Assert.assertTrue(autopointsPage.isLoaded());
-
-        AutopointMapPage autopointMapPage = autopointsPage.selectService(testData.get("selectedService").toString());
-        Assert.assertTrue(autopointMapPage.isLoaded());
-
-        Assert.assertTrue(autopointMapPage.isServiceChecked(testData.get("selectedServiceV2").toString()));
-
-        AutopointPage autopointPage = autopointMapPage.clickRandomAutopoint();
-        Assert.assertTrue(autopointPage.isLoaded());
-        Assert.assertEquals(autopointPage.autopointNameExpected.toLowerCase(), autopointPage.getAutopointName().toLowerCase());
-        Assert.assertTrue(autopointPage.isServiceInList(testData.get("selectedServiceV2").toString()));
-    }
 
     @Test
     public void testGotoForum() {

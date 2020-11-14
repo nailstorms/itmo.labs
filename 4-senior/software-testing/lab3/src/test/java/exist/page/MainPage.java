@@ -15,6 +15,7 @@ public class MainPage {
     private InputField passwordInputField = new InputField("//div[contains(@class,'header-login__form')]//input[@name='pass']");
     private Element authorizationBtn = new Element("//div[contains(@class,'header-login__form')]//input[@id='btnLogin']");
     private TextContainer usernameContainer = new TextContainer("//div[contains(@class,'header-login__name')]//span");
+    private Element personalPageBtn = new Element("//*[normalize-space(text())='Личный кабинет']");
     private Element catalogBtn = new Element("//div[contains(@class,'mainmenu')]//a[contains(text(),'Каталог')]");
     private Element catalogContainer = new Element("//div[contains(@class,'catalogs-float__container')]");
     private Element generalCatalogBtn = new Element("//div[contains(@class,'catalogs-float__container')]//*[normalize-space(text())='Общий каталог']");
@@ -66,6 +67,12 @@ public class MainPage {
 
     public String getCurrentUserName() {
         return this.usernameContainer.getText();
+    }
+
+    public PersonalPage gotoPersonalPage() {
+        this.usernameContainer.click();
+        this.personalPageBtn.click();
+        return new PersonalPage();
     }
 
     public void clickCatalog() {

@@ -100,7 +100,6 @@ public class UnauthorizedUserTest {
         Assert.assertTrue(generalCatalogPage.isLoaded());
 
         int selectedTransportTypeIndex = generalCatalogPage.clickRandomTransportType();
-
         VendorAutoPage vendorAutoPage = generalCatalogPage.clickRandomVendor(selectedTransportTypeIndex);
         Assert.assertTrue(vendorAutoPage.isLoaded());
 
@@ -155,5 +154,51 @@ public class UnauthorizedUserTest {
                 ? (!selectedModel.equals("") ? selectedMake + " " + selectedModel : selectedMake)
                 : "";
         Assert.assertTrue(autoSalesPage.isResultListCorrect(carMakeModel, selectedMileage, selectedTransmission));
+    }
+
+    @Test
+    public void testSelectAutopointService() {
+        driver.get(testData.get("mainUrl").toString());
+        MainPage mainPage = new MainPage();
+        Assert.assertTrue(mainPage.isLoaded());
+
+        AutopointsPage autopointsPage = mainPage.gotoAutopoints();
+        Assert.assertTrue(autopointsPage.isLoaded());
+
+        AutopointMapPage autopointMapPage = autopointsPage.selectService(testData.get("selectedService").toString());
+        Assert.assertTrue(autopointMapPage.isLoaded());
+
+        Assert.assertTrue(autopointMapPage.isServiceChecked(testData.get("selectedServiceV2").toString()));
+
+        AutopointPage autopointPage = autopointMapPage.clickRandomAutopoint();
+        Assert.assertTrue(autopointPage.isLoaded());
+        Assert.assertEquals(autopointPage.autopointNameExpected.toLowerCase(), autopointPage.getAutopointName().toLowerCase());
+        Assert.assertTrue(autopointPage.isServiceInList(testData.get("selectedServiceV2").toString()));
+    }
+
+    @Test
+    public void testSelectAutopointServiceFilter() {
+        driver.get(testData.get("mainUrl").toString());
+        MainPage mainPage = new MainPage();
+        Assert.assertTrue(mainPage.isLoaded());
+
+        AutopointsPage autopointsPage = mainPage.gotoAutopoints();
+        Assert.assertTrue(autopointsPage.isLoaded());
+
+        AutopointMapPage autopointMapPage = autopointsPage.selectService(testData.get("selectedServiceJust2").toString());
+        Assert.assertTrue(autopointMapPage.isLoaded());
+
+        String serviceOne = autopointMapPage.clickRandomService();
+        String serviceTwo = autopointMapPage.clickRandomService();
+
+        AutopointPage autopointPage = autopointMapPage.clickRandomAutopoint();
+        Assert.assertTrue(autopointPage.isLoaded());
+        Assert.assertEquals(autopointPage.autopointNameExpected.toLowerCase(), autopointPage.getAutopointName().toLowerCase());
+        if (autopointPage.isServiceInList(testData.get("selectedServiceJust2").toString()))
+            Assert.assertTrue(autopointPage.isServiceInList(testData.get("selectedServiceJust2").toString()));
+        else {
+            Assert.assertTrue(autopointPage.isServiceInList(serviceOne));
+            Assert.assertTrue(autopointPage.isServiceInList(serviceTwo));
+        }
     }
 }

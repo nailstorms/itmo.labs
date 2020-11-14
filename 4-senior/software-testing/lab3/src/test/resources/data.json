@@ -11,5 +11,6 @@
   "carEngine": "EFA",
   "carPower": "152",
   "selectedService": "сход-развал",
-  "selectedServiceV2": "Сход/развал"
+  "selectedServiceV2": "Сход/развал",
+  "selectedServiceJust2": "Ремонт"
 }
