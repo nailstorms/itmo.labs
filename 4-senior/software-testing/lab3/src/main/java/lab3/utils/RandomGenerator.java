@@ -32,7 +32,7 @@ public class RandomGenerator {
     }
 
     public static String generateRandomPhoneNumber() {
-        return generateRandomNumber(10);
+        return "9" + generateRandomNumber(9);
     }
 
     public static String generateRandomNumber(int length) {

@@ -1,12 +1,9 @@
 package exist.page;
 
-import lab3.framework.browser.BrowserSingleton;
+
 import lab3.framework.element.Element;
 import lab3.framework.element.InputField;
 import lab3.framework.element.TextContainer;
-import org.openqa.selenium.JavascriptExecutor;
-
-import java.util.ArrayList;
 
 public class MainPage {
     private Element logoContainer = new Element("//*[contains(@title,'Автозапчасти EXIST.RU')]");

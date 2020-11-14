@@ -141,12 +141,19 @@ public class UnauthorizedUserTest {
         AutoSalesPage autoSalesPage = sellAutoPage.gotoSales();
         Assert.assertTrue(autoSalesPage.isLoaded());
 
-        String selectedMake = autoSalesPage.selectRandomMake();
-        String selectedModel = autoSalesPage.selectRandomModel();
+        //String selectedMake = autoSalesPage.selectRandomMake();
+        //String selectedModel = autoSalesPage.selectRandomModel();
+        String selectedMake = autoSalesPage.selectMakeNotImportant();
+        String selectedModel = autoSalesPage.selectModelNotImportant();
+        String selectedMileage = autoSalesPage.selectRandomMileage();
+        String selectedTransmission = autoSalesPage.selectRandomTransmission();
+        autoSalesPage.inputRandomPriceRange();
+        autoSalesPage.inputRandomYearRange();
+        autoSalesPage.inputRandomEnginePower();
         autoSalesPage.searchForCar();
         String carMakeModel = !selectedMake.equals("")
                 ? (!selectedModel.equals("") ? selectedMake + " " + selectedModel : selectedMake)
                 : "";
-        Assert.assertTrue(autoSalesPage.isResultListCorrect(carMakeModel));
+        Assert.assertTrue(autoSalesPage.isResultListCorrect(carMakeModel, selectedMileage, selectedTransmission));
     }
 }

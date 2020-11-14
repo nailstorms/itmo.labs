@@ -66,6 +66,11 @@ public class AuthorizedUserTest {
         Assert.assertTrue(autopointMapPage.isLoaded());
 
         Assert.assertTrue(autopointMapPage.isServiceChecked(testData.get("selectedServiceV2").toString()));
+
+        AutopointPage autopointPage = autopointMapPage.clickRandomAutopoint();
+        Assert.assertTrue(autopointPage.isLoaded());
+        Assert.assertEquals(autopointPage.autopointNameExpected.toLowerCase(), autopointPage.getAutopointName().toLowerCase());
+        Assert.assertTrue(autopointPage.isServiceInList(testData.get("selectedServiceV2").toString()));
     }
 
     @Test

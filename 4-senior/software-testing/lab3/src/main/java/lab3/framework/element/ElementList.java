@@ -26,4 +26,13 @@ public class ElementList {
             return null;
         }
     }
+
+    public List<WebElement> getChildrenOfElement(int index, String locator) {
+        try {
+            WebElement element = this.getElements().get(index);
+            return element.findElements(By.xpath(locator));
+        } catch (Exception exc) {
+            return null;
+        }
+    }
 }

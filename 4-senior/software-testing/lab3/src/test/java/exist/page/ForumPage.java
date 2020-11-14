@@ -26,7 +26,7 @@ public class ForumPage {
     }
 
     public boolean isCorrectForum() {
-        TextContainer forumNameContainer = new TextContainer(String.format(forumNameContainerLocatorTemplate, forumNameExpected));
+        TextContainer forumNameContainer = new TextContainer(String.format(forumNameContainerLocatorTemplate, forumNameExpected.replace("'", "\\'")));
         return forumNameContainer.isExisting() && forumNameContainer.isVisible();
     }
 
