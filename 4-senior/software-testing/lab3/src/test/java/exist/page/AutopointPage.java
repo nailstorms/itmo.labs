@@ -26,6 +26,6 @@ public class AutopointPage {
 
     public boolean isServiceInList(String serviceName) {
         TextContainer autopointServiceNameContainer = new TextContainer(String.format(autopointServiceNameLocatorTemplate, serviceName));
-        return autopointServiceNameContainer.isExisting() && autopointServiceNameContainer.isVisible();
+        return autopointServiceNameContainer.isExisting();
     }
 }

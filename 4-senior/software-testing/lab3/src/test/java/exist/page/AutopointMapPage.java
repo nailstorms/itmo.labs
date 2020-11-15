@@ -36,11 +36,12 @@ public class AutopointMapPage {
     }
 
     public String clickRandomService() {
+        JavascriptExecutor executor = (JavascriptExecutor) BrowserSingleton.getInstance();
         int randomIndex = RandomGenerator.getRandomInt(this.autopointServicesList.getElements().size());
         while (randomIndex == lastAutopointServiceClickedIndex) randomIndex = RandomGenerator.getRandomInt(this.autopointsList.getElements().size());
         WebElement randomElement = this.autopointServicesList.getElements().get(randomIndex);
         String text = randomElement.getText();
-        randomElement.click();
+        executor.executeScript("arguments[0].click();", randomElement);
         lastAutopointServiceClickedIndex = randomIndex;
         return text;
     }

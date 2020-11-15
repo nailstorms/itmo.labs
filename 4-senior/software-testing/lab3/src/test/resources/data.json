@@ -10,6 +10,7 @@
   "carModelType": "3.0",
   "carEngine": "EFA",
   "carPower": "152",
+  "selectedServiceSection": "Шиномонтаж",
   "selectedService": "сход-развал",
   "selectedServiceV2": "Сход/развал",
   "selectedServiceJust2": "Ремонт"

@@ -38,6 +38,17 @@ public class Element {
         return checkElement(ExpectedConditions.visibilityOfElementLocated(By.xpath(locator)));
     }
 
+    public boolean isVisibleWoLongWait() {
+        try {
+            WebDriver driver = BrowserSingleton.getInstance();
+            WebDriverWait wait = new WebDriverWait(driver, 7);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(locator)));
+            return true;
+        } catch (TimeoutException exc) {
+            return false;
+        }
+    }
+
     public boolean isClickable() {
         return checkElement(ExpectedConditions.elementToBeClickable(By.xpath(locator)));
     }

@@ -1,4 +1,4 @@
 {
-  "browser": "firefox",
-  "waitTimeSec": 30
+  "browser": "chrome",
+  "waitTimeSec": 60
 }

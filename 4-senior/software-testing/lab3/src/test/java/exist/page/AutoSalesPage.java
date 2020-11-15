@@ -119,7 +119,7 @@ public class AutoSalesPage {
     }
 
     public boolean isResultListCorrect(String modelMake, String mileage, String transmission) {
-        if (this.notFoundContainer.isVisible()) return true;
+        if (this.notFoundContainer.isVisibleWoLongWait()) return true;
 
         List<WebElement> carResultsListElements = this.carResultsList.getElements();
         for (WebElement elem : carResultsListElements) {
@@ -141,8 +141,13 @@ public class AutoSalesPage {
         List<WebElement> mileageResultsListElements = this.mileageResultsList.getElements();
         for (WebElement elem : mileageResultsListElements) {
             String text = elem.getText();
-            int indexOfK = !text.contains("к") ? text.indexOf("К") : text.indexOf("к");
-            int currentMileage = Integer.parseInt(elem.getText().substring(0, indexOfK).trim().replace(" ", ""));
+            int currentMileage;
+            if (text.equals("Новый")) {
+                currentMileage = 0;
+            } else {
+                int indexOfK = !text.contains("к") ? text.indexOf("К") : text.indexOf("к");
+                currentMileage = Integer.parseInt(elem.getText().substring(0, indexOfK).trim().replace(" ", ""));
+            }
 
             switch (mileage) {
                 case "": {

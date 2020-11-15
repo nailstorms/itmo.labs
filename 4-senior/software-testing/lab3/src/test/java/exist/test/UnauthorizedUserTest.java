@@ -172,8 +172,12 @@ public class UnauthorizedUserTest {
 
         AutopointPage autopointPage = autopointMapPage.clickRandomAutopoint();
         Assert.assertTrue(autopointPage.isLoaded());
-        Assert.assertEquals(autopointPage.autopointNameExpected.toLowerCase(), autopointPage.getAutopointName().toLowerCase());
-        Assert.assertTrue(autopointPage.isServiceInList(testData.get("selectedServiceV2").toString()));
+        Assert.assertTrue(autopointPage.autopointNameExpected.toLowerCase().contains(autopointPage.getAutopointName().toLowerCase()));
+        if (autopointPage.isServiceInList(testData.get("selectedServiceSection").toString()))
+            Assert.assertTrue(autopointPage.isServiceInList(testData.get("selectedServiceSection").toString()));
+        else {
+            Assert.assertTrue(autopointPage.isServiceInList(testData.get("selectedServiceV2").toString()));
+        }
     }
 
     @Test
@@ -193,7 +197,7 @@ public class UnauthorizedUserTest {
 
         AutopointPage autopointPage = autopointMapPage.clickRandomAutopoint();
         Assert.assertTrue(autopointPage.isLoaded());
-        Assert.assertEquals(autopointPage.autopointNameExpected.toLowerCase(), autopointPage.getAutopointName().toLowerCase());
+        Assert.assertTrue(autopointPage.autopointNameExpected.toLowerCase().contains(autopointPage.getAutopointName().toLowerCase()));
         if (autopointPage.isServiceInList(testData.get("selectedServiceJust2").toString()))
             Assert.assertTrue(autopointPage.isServiceInList(testData.get("selectedServiceJust2").toString()));
         else {
