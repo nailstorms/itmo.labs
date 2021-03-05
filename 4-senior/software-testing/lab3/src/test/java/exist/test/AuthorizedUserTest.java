@@ -80,7 +80,7 @@ public class AuthorizedUserTest {
 
         ForumDiscussionPage forumDiscussionPage = forumPage.gotoRandomForumDiscussion();
         Assert.assertTrue(forumDiscussionPage.isLoaded());
-        Assert.assertEquals(forumDiscussionPage.forumDiscussionNameExpected, forumDiscussionPage.getDiscussionName());
+        Assert.assertTrue(forumDiscussionPage.getDiscussionName().contains(forumDiscussionPage.forumDiscussionNameExpected));
     }
 
     @Test

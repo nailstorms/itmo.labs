@@ -9,3 +9,5 @@ cmake*
 __pycache__/
 .venv/
 /**/credentials*
+.gradle/
+build/
